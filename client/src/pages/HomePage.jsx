@@ -25,36 +25,38 @@ function HomePage() {
   if (loading) return <div className="loading">טוען...</div>
 
   return (
-    <div>
+    <div className="home-layout">
       <div className="header">
         <h1>🏠 דירה לי</h1>
         <Link to="/apartments/new" className="btn btn-primary">+ דירה חדשה</Link>
       </div>
 
-      {apartments.length === 0 ? (
-        <div className="empty-state">
-          <div className="icon">🏘️</div>
-          <p>עוד לא הוספתם דירות</p>
-          <p>לחצו על "דירה חדשה" כדי להתחיל</p>
-        </div>
-      ) : (
-        apartments.map(apt => (
-          <Link to={`/apartments/${apt.id}`} key={apt.id} className="apartment-card">
-            <div className="card">
-              <div className="card-top">
-                <span className="address">{apt.address}</span>
-                {apt.asking_price && <span className="price">{formatPrice(apt.asking_price)}</span>}
+      <div className="apartment-list">
+        {apartments.length === 0 ? (
+          <div className="empty-state">
+            <div className="icon">🏘️</div>
+            <p>עוד לא הוספתם דירות</p>
+            <p>לחצו על "דירה חדשה" כדי להתחיל</p>
+          </div>
+        ) : (
+          apartments.map(apt => (
+            <Link to={`/apartments/${apt.id}`} key={apt.id} className="apartment-card">
+              <div className="card">
+                <div className="card-top">
+                  <span className="address">{apt.address}</span>
+                  {apt.asking_price && <span className="price">{formatPrice(apt.asking_price)}</span>}
+                </div>
+                <div className="meta">
+                  {apt.neighborhood && <span>{apt.neighborhood}</span>}
+                  {apt.visit_date && <span>{formatDate(apt.visit_date)}</span>}
+                  {apt.overall_rating && <span>{'★'.repeat(apt.overall_rating)}{'☆'.repeat(5 - apt.overall_rating)}</span>}
+                  {apt.Images && apt.Images.length > 0 && <span>📷 {apt.Images.length}</span>}
+                </div>
               </div>
-              <div className="meta">
-                {apt.neighborhood && <span>{apt.neighborhood}</span>}
-                {apt.visit_date && <span>{formatDate(apt.visit_date)}</span>}
-                {apt.overall_rating && <span>{'★'.repeat(apt.overall_rating)}{'☆'.repeat(5 - apt.overall_rating)}</span>}
-                {apt.Images && apt.Images.length > 0 && <span>📷 {apt.Images.length}</span>}
-              </div>
-            </div>
-          </Link>
-        ))
-      )}
+            </Link>
+          ))
+        )}
+      </div>
     </div>
   )
 }

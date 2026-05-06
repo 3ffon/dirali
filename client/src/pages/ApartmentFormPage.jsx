@@ -4,6 +4,8 @@ import { fetchApartment, fetchQuestions, createApartment, updateApartment, saveA
 import QuestionField from '../components/QuestionField'
 import ImageUploader from '../components/ImageUploader'
 
+const today = () => new Date().toISOString().split('T')[0]
+
 function ApartmentFormPage() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -11,7 +13,7 @@ function ApartmentFormPage() {
 
   const [questions, setQuestions] = useState(null)
   const [meta, setMeta] = useState({
-    address: '', neighborhood: '', visit_date: '', asking_price: '',
+    address: '', neighborhood: '', visit_date: today(), asking_price: '',
     agent_name: '', agent_phone: '', overall_rating: '', notes: '',
     pros: '[]', cons: '[]', deal_breakers: '[]',
   })
@@ -121,139 +123,162 @@ function ApartmentFormPage() {
     scheduleSave()
   }
 
+  const handleReset = () => {
+    if (!confirm('לאפס את כל הטופס?')) return
+    setMeta({
+      address: '', neighborhood: '', visit_date: today(), asking_price: '',
+      agent_name: '', agent_phone: '', overall_rating: '', notes: '',
+      pros: '[]', cons: '[]', deal_breakers: '[]',
+    })
+    setAnswers({})
+  }
+
+  const handleManualSave = () => {
+    if (saveTimer.current) clearTimeout(saveTimer.current)
+    doSave()
+  }
+
   if (loading) return <div className="loading">טוען...</div>
 
   return (
-    <div>
+    <div className="form-layout">
       <div className={`save-indicator ${saveStatus === 'saved' ? 'visible' : ''}`}>
         ✓ נשמר
       </div>
 
-      <Link to={apartmentId ? `/apartments/${apartmentId}` : '/'} className="back-link">
-        → חזרה
-      </Link>
+      <div className="form-topbar">
+        <Link to={apartmentId ? `/apartments/${apartmentId}` : '/'} className="back-link">
+          → חזרה
+        </Link>
+        <h2>{isNew ? 'דירה חדשה' : 'עריכת דירה'}</h2>
+      </div>
 
-      <h2 style={{ marginBottom: 20 }}>{isNew ? 'דירה חדשה' : 'עריכת דירה'}</h2>
+      <div className="form-content">
+        <div className="category-section">
+          <div className="category-header">📝 פרטים כלליים</div>
 
-      <div className="category-section">
-        <div className="category-header">📝 פרטים כלליים</div>
+          <div className="apartment-meta">
+            <div className="full-width">
+              <div className="question-field">
+                <label>כתובת *</label>
+                <input
+                  value={meta.address}
+                  onChange={e => handleMetaChange('address', e.target.value)}
+                  placeholder="רחוב, מספר, עיר"
+                />
+              </div>
+            </div>
 
-        <div className="apartment-meta">
-          <div className="full-width">
             <div className="question-field">
-              <label>כתובת *</label>
+              <label>שכונה</label>
               <input
-                value={meta.address}
-                onChange={e => handleMetaChange('address', e.target.value)}
-                placeholder="רחוב, מספר, עיר"
+                value={meta.neighborhood}
+                onChange={e => handleMetaChange('neighborhood', e.target.value)}
+              />
+            </div>
+
+            <div className="question-field">
+              <label>תאריך ביקור</label>
+              <input
+                type="date"
+                value={meta.visit_date}
+                onChange={e => handleMetaChange('visit_date', e.target.value)}
+              />
+            </div>
+
+            <div className="question-field">
+              <label>מחיר מבוקש (₪)</label>
+              <input
+                type="number"
+                value={meta.asking_price}
+                onChange={e => handleMetaChange('asking_price', e.target.value)}
+              />
+            </div>
+
+            <div className="question-field">
+              <label>דירוג כללי</label>
+              <div className="rating-group">
+                {[1, 2, 3, 4, 5].map(n => (
+                  <button
+                    key={n}
+                    type="button"
+                    className={`rating-btn ${parseInt(meta.overall_rating) === n ? 'active' : ''}`}
+                    onClick={() => handleMetaChange('overall_rating', parseInt(meta.overall_rating) === n ? '' : String(n))}
+                  >{n}</button>
+                ))}
+              </div>
+            </div>
+
+            <div className="question-field">
+              <label>שם סוכן/מתווך</label>
+              <input
+                value={meta.agent_name}
+                onChange={e => handleMetaChange('agent_name', e.target.value)}
+              />
+            </div>
+
+            <div className="question-field">
+              <label>טלפון סוכן</label>
+              <input
+                type="tel"
+                value={meta.agent_phone}
+                onChange={e => handleMetaChange('agent_phone', e.target.value)}
+              />
+            </div>
+
+            <div className="full-width question-field">
+              <label>הערות כלליות</label>
+              <textarea
+                value={meta.notes}
+                onChange={e => handleMetaChange('notes', e.target.value)}
+                rows={3}
               />
             </div>
           </div>
-
-          <div className="question-field">
-            <label>שכונה</label>
-            <input
-              value={meta.neighborhood}
-              onChange={e => handleMetaChange('neighborhood', e.target.value)}
-            />
-          </div>
-
-          <div className="question-field">
-            <label>תאריך ביקור</label>
-            <input
-              type="date"
-              value={meta.visit_date}
-              onChange={e => handleMetaChange('visit_date', e.target.value)}
-            />
-          </div>
-
-          <div className="question-field">
-            <label>מחיר מבוקש (₪)</label>
-            <input
-              type="number"
-              value={meta.asking_price}
-              onChange={e => handleMetaChange('asking_price', e.target.value)}
-            />
-          </div>
-
-          <div className="question-field">
-            <label>דירוג כללי</label>
-            <div className="rating-group">
-              {[1, 2, 3, 4, 5].map(n => (
-                <button
-                  key={n}
-                  type="button"
-                  className={`rating-btn ${parseInt(meta.overall_rating) === n ? 'active' : ''}`}
-                  onClick={() => handleMetaChange('overall_rating', parseInt(meta.overall_rating) === n ? '' : String(n))}
-                >{n}</button>
-              ))}
-            </div>
-          </div>
-
-          <div className="question-field">
-            <label>שם סוכן/מתווך</label>
-            <input
-              value={meta.agent_name}
-              onChange={e => handleMetaChange('agent_name', e.target.value)}
-            />
-          </div>
-
-          <div className="question-field">
-            <label>טלפון סוכן</label>
-            <input
-              type="tel"
-              value={meta.agent_phone}
-              onChange={e => handleMetaChange('agent_phone', e.target.value)}
-            />
-          </div>
-
-          <div className="full-width question-field">
-            <label>הערות כלליות</label>
-            <textarea
-              value={meta.notes}
-              onChange={e => handleMetaChange('notes', e.target.value)}
-              rows={3}
-            />
-          </div>
         </div>
+
+        {questions && questions.categories.map(category => (
+          <div key={category.id} className="category-section">
+            <div className="category-header">
+              <span>{category.icon}</span>
+              <span>{category.name_he}</span>
+            </div>
+            {category.description_he && (
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: 12 }}>
+                {category.description_he}
+              </p>
+            )}
+            {category.questions.map(q => (
+              <QuestionField
+                key={q.id}
+                question={q}
+                value={answers[q.id]?.value || ''}
+                notes={answers[q.id]?.notes || ''}
+                onChange={handleAnswerChange}
+              />
+            ))}
+          </div>
+        ))}
+
+        {apartmentId && (
+          <ImageUploader
+            apartmentId={apartmentId}
+            images={images}
+            onUpdate={setImages}
+          />
+        )}
+
+        {!apartmentId && meta.address && (
+          <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: 20 }}>
+            הדירה תישמר אוטומטית ואז תוכלו להוסיף תמונות
+          </p>
+        )}
       </div>
 
-      {questions && questions.categories.map(category => (
-        <div key={category.id} className="category-section">
-          <div className="category-header">
-            <span>{category.icon}</span>
-            <span>{category.name_he}</span>
-          </div>
-          {category.description_he && (
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: 12 }}>
-              {category.description_he}
-            </p>
-          )}
-          {category.questions.map(q => (
-            <QuestionField
-              key={q.id}
-              question={q}
-              value={answers[q.id]?.value || ''}
-              notes={answers[q.id]?.notes || ''}
-              onChange={handleAnswerChange}
-            />
-          ))}
-        </div>
-      ))}
-
-      {apartmentId && (
-        <ImageUploader
-          apartmentId={apartmentId}
-          images={images}
-          onUpdate={setImages}
-        />
-      )}
-
-      {!apartmentId && meta.address && (
-        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: 20 }}>
-          הדירה תישמר אוטומטית ואז תוכלו להוסיף תמונות
-        </p>
-      )}
+      <div className="form-footer">
+        <button type="button" className="btn btn-secondary" onClick={handleReset}>איפוס</button>
+        <button type="button" className="btn btn-primary" onClick={handleManualSave}>שמור</button>
+      </div>
     </div>
   )
 }

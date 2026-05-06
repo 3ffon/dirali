@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client\"",
     "server": "cd server && node index.js",
+    "server:dev": "cd server && node --watch index.js",
     "client": "cd client && npm run dev",
-    "install-all": "npm install && cd server && npm install && cd ../client && npm install"
+    "build": "cd client && npm run build",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "docker:build": "docker build -t dirali .",
+    "docker:run": "docker run -p 3002:3002 -v ./data/uploads:/app/uploads -v ./data/database.sqlite:/app/database.sqlite dirali"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
