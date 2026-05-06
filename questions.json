@@ -1,0 +1,169 @@
+{
+  "metadata": {
+    "title": "Apartment Viewing Checklist",
+    "title_he": "רשימת שאלות לביקור בדירה",
+    "version": "1.0",
+    "language": "he",
+    "buyers": ["עמית", "ענבר"]
+  },
+  "categories": [
+    {
+      "id": "basic_info",
+      "name_he": "פרטי הדירה הבסיסיים",
+      "icon": "🏠",
+      "questions": [
+        { "id": "size_sqm", "question_he": "מה הגודל המדויק במ\"ר (ברוטו/נטו)?", "answer_type": "text" },
+        { "id": "rooms_count_size", "question_he": "כמה חדרים בפועל ומה הגודל של כל חדר?", "answer_type": "text" },
+        { "id": "directions", "question_he": "מה כיווני האוויר של הדירה?", "answer_type": "multi_select", "options": ["צפון", "דרום", "מזרח", "מערב"] },
+        { "id": "floor", "question_he": "באיזו קומה הדירה ומכמה קומות הבניין?", "answer_type": "text" },
+        { "id": "mamad", "question_he": "האם יש ממ\"ד? אם לא - איפה המקלט?", "answer_type": "text" },
+        { "id": "year_built", "question_he": "שנת בנייה של הבניין?", "answer_type": "number" }
+      ]
+    },
+    {
+      "id": "legal_status",
+      "name_he": "מצב משפטי ובעלות",
+      "icon": "🔑",
+      "questions": [
+        { "id": "tabu_owner", "question_he": "על שם מי הדירה רשומה בטאבו?", "answer_type": "text" },
+        { "id": "owners_count", "question_he": "כמה בעלים יש? כולם מסכימים למכור?", "answer_type": "text" },
+        { "id": "liens", "question_he": "האם יש הערות אזהרה, עיקולים, משכנתא קיימת?", "answer_type": "boolean_with_notes" },
+        { "id": "building_violations", "question_he": "האם יש חריגות בנייה? היתרי בנייה תקינים?", "answer_type": "boolean_with_notes" },
+        { "id": "registered_residential", "question_he": "האם הדירה רשומה כדירת מגורים (לא עסק/מחסן)?", "answer_type": "boolean" },
+        { "id": "shared_house_registered", "question_he": "האם הבניין רשום בית משותף עם תקנון?", "answer_type": "boolean" }
+      ]
+    },
+    {
+      "id": "ongoing_costs",
+      "name_he": "עלויות שוטפות",
+      "icon": "💰",
+      "questions": [
+        { "id": "arnona", "question_he": "כמה ארנונה חודשית?", "answer_type": "number", "unit": "ILS" },
+        { "id": "vaad_bayit", "question_he": "כמה ועד בית? מה זה כולל (חצר, מעלית, ניקיון)?", "answer_type": "text" },
+        { "id": "renovation_fund", "question_he": "האם יש קרן שיקום? כמה יש בה?", "answer_type": "text" },
+        { "id": "upcoming_fees", "question_he": "האם צפויים היטלים מיוחדים בקרוב (שיפוץ, מעלית, צביעה)?", "answer_type": "boolean_with_notes" },
+        { "id": "outstanding_debts", "question_he": "חשבון מים, ארנונה - האם יש חובות שנגררים?", "answer_type": "boolean_with_notes" }
+      ]
+    },
+    {
+      "id": "physical_condition",
+      "name_he": "מצב פיזי של הדירה",
+      "icon": "🏗️",
+      "questions": [
+        { "id": "last_renovation", "question_he": "מתי שופצה לאחרונה? מה שופץ?", "answer_type": "text" },
+        { "id": "plumbing_electrical", "question_he": "מצב הצנרת והחשמל (גיל, האם הוחלפו)?", "answer_type": "text" },
+        { "id": "moisture_damage", "question_he": "האם יש רטיבויות, נזילות, סדקים? איפה?", "answer_type": "boolean_with_notes" },
+        { "id": "windows_insulation", "question_he": "מצב החלונות והבידוד (כפול/בודד, אקוסטי)?", "answer_type": "text" },
+        { "id": "hvac", "question_he": "מערכת חימום/מיזוג - מה קיים ובאיזה מצב?", "answer_type": "text" },
+        { "id": "flooring", "question_he": "מצב הריצוף - מקורי או הוחלף?", "answer_type": "text" },
+        { "id": "boiler", "question_he": "בוילר - חשמלי/שמש/גז? גילו?", "answer_type": "text" }
+      ]
+    },
+    {
+      "id": "parking_storage_balcony",
+      "name_he": "חניה, מחסן, מרפסת",
+      "icon": "🅿️",
+      "questions": [
+        { "id": "parking_count", "question_he": "כמה חניות? מקורה/לא? צמודה לדירה ברישום?", "answer_type": "text" },
+        { "id": "parking_location", "question_he": "איפה החניה ממוקמת? גודל?", "answer_type": "text" },
+        { "id": "storage", "question_he": "מחסן - גודל, מיקום, רשום בטאבו?", "answer_type": "text" },
+        { "id": "balcony", "question_he": "גודל המרפסת? פתוחה/סגורה? מקורה?", "answer_type": "text" }
+      ]
+    },
+    {
+      "id": "building_environment",
+      "name_he": "הבניין והסביבה",
+      "icon": "🏢",
+      "questions": [
+        { "id": "apartments_in_building", "question_he": "כמה דירות בבניין? כמה דיירים?", "answer_type": "text" },
+        { "id": "elevator", "question_he": "האם יש מעלית? מעלית שבת?", "answer_type": "text" },
+        { "id": "common_areas", "question_he": "מצב חדר המדרגות, הלובי, הגינה הציבורית?", "answer_type": "text" },
+        { "id": "neighbors", "question_he": "מי השכנים? משפחות/סטודנטים/מבוגרים?", "answer_type": "text" },
+        { "id": "recurring_issues", "question_he": "האם יש בעיות חוזרות (רעש, ריבים, ועד בעייתי)?", "answer_type": "boolean_with_notes" },
+        { "id": "tama_pinui", "question_he": "האם הבניין מועמד לתמ\"א 38 / פינוי-בינוי? באיזה שלב?", "answer_type": "text" }
+      ]
+    },
+    {
+      "id": "sale_process",
+      "name_he": "תהליך המכירה",
+      "icon": "📅",
+      "questions": [
+        { "id": "reason_for_selling", "question_he": "למה המוכרים מוכרים?", "answer_type": "text" },
+        { "id": "time_on_market", "question_he": "כמה זמן הדירה בשוק?", "answer_type": "text" },
+        { "id": "other_offers", "question_he": "האם יש מציעים נוספים כרגע?", "answer_type": "boolean_with_notes" },
+        { "id": "vacate_date", "question_he": "מתי המוכרים יכולים לפנות את הדירה?", "answer_type": "text" },
+        { "id": "timeline_flexibility", "question_he": "האם הם גמישים בלוחות זמנים?", "answer_type": "boolean_with_notes" },
+        { "id": "asking_price", "question_he": "מה המחיר המבוקש ומה הגמישות?", "answer_type": "text" }
+      ]
+    },
+    {
+      "id": "neighborhood",
+      "name_he": "השכונה והסביבה הקרובה",
+      "icon": "🌆",
+      "questions": [
+        { "id": "street_parking", "question_he": "חניה ברחוב בערב/בלילה?", "answer_type": "text" },
+        { "id": "noise_sources", "question_he": "רעש - כביש ראשי, פאב, גן ילדים, בית כנסת?", "answer_type": "text" },
+        { "id": "amenities_distance", "question_he": "מרחק מתחבורה ציבורית, סופר, גנים, בתי ספר?", "answer_type": "text" },
+        { "id": "future_construction", "question_he": "האם יש פרויקטי בנייה מתוכננים בסביבה?", "answer_type": "boolean_with_notes" },
+        { "id": "safety", "question_he": "ביטחון/שקט באזור?", "answer_type": "text" }
+      ]
+    },
+    {
+      "id": "self_check",
+      "name_he": "לבדוק בעצמכם בזמן הביקור",
+      "icon": "👀",
+      "description_he": "לא לשאול - לראות בעצמכם",
+      "questions": [
+        { "id": "water_pressure", "question_he": "לחץ מים בברזים ובמקלחת", "answer_type": "rating_1_5" },
+        { "id": "mold_smell", "question_he": "ריח טחב או עובש (במיוחד בארונות, מאחורי ריהוט)", "answer_type": "boolean_with_notes" },
+        { "id": "doors_windows", "question_he": "האם דלתות וחלונות נסגרים חלק", "answer_type": "boolean_with_notes" },
+        { "id": "cellular_reception", "question_he": "קליטת סלולר בכל החדרים", "answer_type": "rating_1_5" },
+        { "id": "power_outlets", "question_he": "כמות שקעי חשמל בכל חדר", "answer_type": "text" },
+        { "id": "natural_light", "question_he": "אור טבעי בשעות שונות (חזרו פעם נוספת בשעה אחרת)", "answer_type": "rating_1_5" },
+        { "id": "neighbor_noise", "question_he": "רעשי שכנים מלמעלה/מהצדדים", "answer_type": "boolean_with_notes" },
+        { "id": "stairwell_smell", "question_he": "ריח כללי בחדר המדרגות (מצביע על מצב הבניין)", "answer_type": "text" }
+      ]
+    },
+    {
+      "id": "documents_to_request",
+      "name_he": "מסמכים לבקש מהמוכר/מתווך",
+      "icon": "📋",
+      "questions": [
+        { "id": "doc_tabu", "question_he": "נסח טאבו עדכני", "answer_type": "checkbox" },
+        { "id": "doc_rights_confirmation", "question_he": "אישור זכויות (אם לא רשומה בטאבו)", "answer_type": "checkbox" },
+        { "id": "doc_building_permit", "question_he": "היתר בנייה ותוכניות", "answer_type": "checkbox" },
+        { "id": "doc_recent_bills", "question_he": "חשבונות ארנונה, ועד בית, חשמל ומים אחרונים", "answer_type": "checkbox" },
+        { "id": "doc_no_debt_certificate", "question_he": "אישור היעדר חובות מהעיריה (לפני חתימה)", "answer_type": "checkbox" },
+        { "id": "doc_house_bylaws", "question_he": "תקנון הבית המשותף", "answer_type": "checkbox" }
+      ]
+    }
+  ],
+  "answer_type_definitions": {
+    "text": "Free text answer",
+    "number": "Numeric value",
+    "boolean": "Yes / No",
+    "boolean_with_notes": "Yes / No + optional notes field",
+    "multi_select": "Choose one or more from options array",
+    "rating_1_5": "Rating from 1 (poor) to 5 (excellent)",
+    "checkbox": "Received / Not received"
+  },
+  "property_metadata_schema": {
+    "description": "Suggested fields to track per property visit",
+    "fields": {
+      "property_id": "string (unique id, e.g. timestamp or address slug)",
+      "address": "string",
+      "neighborhood": "string",
+      "visit_date": "ISO 8601 datetime",
+      "visit_number": "integer (1st visit, 2nd visit, etc.)",
+      "asking_price": "number",
+      "agent_name": "string",
+      "agent_phone": "string",
+      "photos": "array of file paths or URLs",
+      "overall_rating": "rating_1_5",
+      "deal_breakers": "array of strings",
+      "pros": "array of strings",
+      "cons": "array of strings",
+      "follow_up_actions": "array of strings"
+    }
+  }
+}
