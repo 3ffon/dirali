@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchApartments, getImageUrl } from '../api'
+import ApartmentsMap from '../components/ApartmentsMap'
 
 function HomePage() {
   const [apartments, setApartments] = useState([])
@@ -57,6 +58,8 @@ function HomePage() {
           ))
         )}
       </div>
+
+      <ApartmentsMap apartments={apartments} />
     </div>
   )
 }

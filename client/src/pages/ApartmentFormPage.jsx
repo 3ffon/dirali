@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { fetchApartment, fetchQuestions, createApartment, updateApartment, saveAnswers, uploadImages } from '../api'
 import QuestionField from '../components/QuestionField'
 import ImageUploader from '../components/ImageUploader'
+import PlacesAutocomplete from '../components/PlacesAutocomplete'
 
 const today = () => new Date().toISOString().split('T')[0]
 
@@ -15,6 +16,7 @@ function ApartmentFormPage() {
   const [meta, setMeta] = useState({
     address: '', neighborhood: '', visit_date: today(), asking_price: '',
     agent_name: '', agent_phone: '', overall_rating: '', notes: '',
+    latitude: null, longitude: null,
     pros: '[]', cons: '[]', deal_breakers: '[]',
   })
   const [answers, setAnswers] = useState({})
@@ -47,6 +49,8 @@ function ApartmentFormPage() {
           agent_phone: apt.agent_phone || '',
           overall_rating: apt.overall_rating || '',
           notes: apt.notes || '',
+          latitude: apt.latitude || null,
+          longitude: apt.longitude || null,
           pros: apt.pros || '[]',
           cons: apt.cons || '[]',
           deal_breakers: apt.deal_breakers || '[]',
@@ -129,6 +133,7 @@ function ApartmentFormPage() {
     setMeta({
       address: '', neighborhood: '', visit_date: today(), asking_price: '',
       agent_name: '', agent_phone: '', overall_rating: '', notes: '',
+      latitude: null, longitude: null,
       pros: '[]', cons: '[]', deal_breakers: '[]',
     })
     setAnswers({})
@@ -180,10 +185,20 @@ function ApartmentFormPage() {
             <div className="full-width">
               <div className="question-field">
                 <label>כתובת *</label>
-                <input
+                <PlacesAutocomplete
                   value={meta.address}
-                  onChange={e => handleMetaChange('address', e.target.value)}
-                  placeholder="רחוב, מספר, עיר"
+                  onChange={val => handleMetaChange('address', val)}
+                  onPlaceSelect={({ address, lat, lng, neighborhood }) => {
+                    setMeta(prev => ({
+                      ...prev,
+                      address,
+                      latitude: lat,
+                      longitude: lng,
+                      neighborhood: neighborhood || prev.neighborhood,
+                    }))
+                    scheduleSave()
+                  }}
+                  placeholder="חפש כתובת..."
                 />
               </div>
             </div>

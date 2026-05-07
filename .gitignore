@@ -1,5 +1,7 @@
 node_modules/
 dist/
+.env
+.env.local
 server/database.sqlite
 server/uploads/*
 !server/uploads/.gitkeep

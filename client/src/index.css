@@ -63,9 +63,17 @@ body {
 
 .apartment-list {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   padding: 12px 16px;
+}
+
+.apartments-map {
+  flex-shrink: 0;
+  height: 40%;
+  width: 100%;
+  border-top: 1px solid var(--border);
 }
 
 a {
@@ -447,6 +455,65 @@ textarea {
 
 .apartment-meta .full-width {
   grid-column: 1 / -1;
+}
+
+.places-autocomplete-wrapper {
+  width: 100%;
+}
+
+.places-autocomplete-container {
+  width: 100%;
+}
+
+.places-autocomplete-container gmp-basic-place-autocomplete {
+  width: 100%;
+  color-scheme: light;
+  --gmp-mat-color-surface: var(--card-bg);
+  --gmp-mat-color-on-surface: var(--text);
+}
+
+.places-autocomplete-container gmp-basic-place-autocomplete::part(input) {
+  font-family: inherit;
+  font-size: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  width: 100%;
+  background: var(--card-bg);
+  color: var(--text);
+  color-scheme: light;
+}
+
+.places-selected-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.places-selected-value span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.places-change-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
 }
 
 .detail-section {
