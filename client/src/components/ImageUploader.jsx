@@ -3,7 +3,6 @@ import { getImageUrl, uploadImages, deleteImage } from '../api'
 
 function ImageUploader({ apartmentId, images, onUpdate }) {
   const fileRef = useRef()
-  const cameraRef = useRef()
   const [viewIndex, setViewIndex] = useState(null)
 
   const handleUpload = async (files) => {
@@ -59,30 +58,17 @@ function ImageUploader({ apartmentId, images, onUpdate }) {
         <button
           type="button"
           className="btn btn-secondary"
-          onClick={() => cameraRef.current.click()}
-        >📸 צלם</button>
-        <button
-          type="button"
-          className="btn btn-secondary"
           onClick={() => fileRef.current.click()}
         >🖼️ גלריה</button>
       </div>
 
-      <input
-        ref={cameraRef}
-        type="file"
-        accept="image/*"
-        capture="environment"
-        style={{ display: 'none' }}
-        onChange={e => handleUpload(e.target.files)}
-      />
       <input
         ref={fileRef}
         type="file"
         accept="image/*"
         multiple
         style={{ display: 'none' }}
-        onChange={e => handleUpload(e.target.files)}
+        onChange={e => { handleUpload(e.target.files); e.target.value = '' }}
       />
     </div>
   )

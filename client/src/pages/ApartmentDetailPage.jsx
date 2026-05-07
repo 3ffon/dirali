@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { fetchApartment, fetchQuestions, deleteApartment } from "../api";
+import { fetchApartment, fetchQuestions, deleteApartment, uploadImages } from "../api";
 import ImageViewer from "../components/ImageViewer";
 
 function ApartmentDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const cameraRef = useRef(null);
   const [apartment, setApartment] = useState(null);
   const [questions, setQuestions] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,6 +24,15 @@ function ApartmentDetailPage() {
     if (!confirm("למחוק את הדירה?")) return;
     await deleteApartment(id);
     navigate("/");
+  };
+
+  const handleCameraUpload = async (files) => {
+    if (!files || files.length === 0) return;
+    const newImages = await uploadImages(id, files);
+    setApartment(prev => ({
+      ...prev,
+      Images: [...(prev.Images || []), ...newImages],
+    }));
   };
 
   const formatPrice = (price) => {
@@ -92,6 +102,9 @@ function ApartmentDetailPage() {
         </Link>
 
         <div style={{ display: "flex", gap: 8, marginRight: "auto" }}>
+          <button type="button" className="btn btn-secondary" onClick={() => cameraRef.current.click()}>
+            📸
+          </button>
           <Link to={`/apartments/${id}/edit`} className="btn btn-secondary">
             ✏️
           </Link>
@@ -99,6 +112,14 @@ function ApartmentDetailPage() {
             🗑️
           </button>
         </div>
+        <input
+          ref={cameraRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          style={{ display: 'none' }}
+          onChange={e => { handleCameraUpload(e.target.files); e.target.value = '' }}
+        />
       </div>
 
       <div className="sub-detail-topbar">

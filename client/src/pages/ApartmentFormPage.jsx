@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { fetchApartment, fetchQuestions, createApartment, updateApartment, saveAnswers } from '../api'
+import { fetchApartment, fetchQuestions, createApartment, updateApartment, saveAnswers, uploadImages } from '../api'
 import QuestionField from '../components/QuestionField'
 import ImageUploader from '../components/ImageUploader'
 
@@ -23,6 +23,7 @@ function ApartmentFormPage() {
   const [saveStatus, setSaveStatus] = useState('')
   const [loading, setLoading] = useState(true)
 
+  const cameraRef = useRef(null)
   const saveTimer = useRef(null)
   const metaRef = useRef(meta)
   const answersRef = useRef(answers)
@@ -138,6 +139,12 @@ function ApartmentFormPage() {
     doSave()
   }
 
+  const handleCameraUpload = async (files) => {
+    if (!files || files.length === 0 || !apartmentId) return
+    const newImages = await uploadImages(apartmentId, files)
+    setImages(prev => [...prev, ...newImages])
+  }
+
   if (loading) return <div className="loading">טוען...</div>
 
   return (
@@ -150,7 +157,19 @@ function ApartmentFormPage() {
         <Link to={apartmentId ? `/apartments/${apartmentId}` : '/'} className="back-link">
           → חזרה
         </Link>
-        <h2>{isNew ? 'דירה חדשה' : 'עריכת דירה'}</h2>
+        {apartmentId && (
+          <button type="button" className="btn btn-secondary" style={{ marginRight: 'auto' }} onClick={() => cameraRef.current.click()}>
+            📸
+          </button>
+        )}
+        <input
+          ref={cameraRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          style={{ display: 'none' }}
+          onChange={e => { handleCameraUpload(e.target.files); e.target.value = '' }}
+        />
       </div>
 
       <div className="form-content">
