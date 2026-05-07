@@ -16,12 +16,12 @@ RUN npm install --omit=dev
 COPY server/ ./
 COPY --from=client-build /app/client/dist ./public
 
-RUN mkdir -p /app/uploads
+RUN mkdir -p /app/uploads /app/data
 
 ENV STATIC_DIR=/app/public
 ENV PORT=3002
 
-VOLUME ["/app/uploads", "/app/database.sqlite"]
+VOLUME ["/app/uploads", "/app/data"]
 
 EXPOSE 3002
 

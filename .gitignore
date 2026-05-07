@@ -3,3 +3,4 @@ dist/
 server/database.sqlite
 server/uploads/*
 !server/uploads/.gitkeep
+data/

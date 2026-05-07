@@ -10,7 +10,7 @@
     "build": "cd client && npm run build",
     "install-all": "npm install && cd server && npm install && cd ../client && npm install",
     "docker:build": "docker build -t dirali .",
-    "docker:run": "docker run -p 3002:3002 -v ./data/uploads:/app/uploads -v ./data/database.sqlite:/app/database.sqlite dirali"
+    "docker:run": "docker run -p 3002:3002 -v ./data/uploads:/app/uploads -v ./data/db:/app/data dirali"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
