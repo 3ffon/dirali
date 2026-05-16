@@ -33,6 +33,8 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const apartment = await Apartment.findByPk(req.params.id);
   if (!apartment) return res.status(404).json({ error: 'Not found' });
+  await Answer.destroy({ where: { apartment_id: req.params.id } });
+  await Image.destroy({ where: { apartment_id: req.params.id } });
   await apartment.destroy();
   res.json({ success: true });
 });

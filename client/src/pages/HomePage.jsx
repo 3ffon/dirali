@@ -14,6 +14,7 @@ function HomePage() {
   useEffect(() => {
     fetchApartments()
       .then(setApartments)
+      .catch(() => {})
       .finally(() => setLoading(false))
     fetchUserProfile().then(user => {
       if (user.latitude && user.longitude) {

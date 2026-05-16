@@ -1,6 +1,6 @@
 import { isOnline, subscribe } from './networkStatus'
 import {
-  getAllPending, dequeue, clearAll, updateQueueItem,
+  getAllPending, dequeue, updateQueueItem,
   putApartment, getApartment, removeApartmentOnly,
   removeImageRecord, getImageRecord,
   putBroker, removeBroker, getBrokers,
@@ -141,10 +141,9 @@ export async function syncAll() {
       }
     }
 
-    // If queue fully drained, clear local store and refresh from server
+    // If queue fully drained, refresh cache from server (don't clear — active reads may be in progress)
     const remaining = await getAllPending()
     if (remaining.length === 0) {
-      await clearAll()
       await refreshCache()
     }
   } finally {

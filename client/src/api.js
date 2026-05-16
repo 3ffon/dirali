@@ -5,7 +5,7 @@ import {
   putImageRecord, getImageRecord, removeImageRecord, getImagesForApartment,
   cacheBrokers, getBrokers, putBroker, removeBroker,
   cacheQuestions, getQuestions,
-  enqueue,
+  enqueue, getAllPending, dequeueByEntity,
 } from './offlineStore'
 
 export { onSyncChange, onIdRemap, isSyncing } from './syncEngine'
@@ -42,13 +42,22 @@ export async function fetchApartments() {
   const localApartments = await getApartments()
   const tempApartments = localApartments.filter(a => isTempId(a.id))
 
+  // Check for pending deletes so we don't re-show them from server data
+  const pendingOps = await getAllPending()
+  const pendingDeleteIds = new Set(
+    pendingOps.filter(op => op.type === 'delete_apartment').map(op => op.entityId)
+  )
+
   try {
     const data = await serverRequest('/apartments')
-    await cacheApartments(data)
+    const filtered = data.filter(a => !pendingDeleteIds.has(a.id))
+    await cacheApartments(filtered)
     for (const apt of tempApartments) await putApartment(apt)
-    return [...tempApartments, ...data]
+    return [...tempApartments, ...filtered]
   } catch (err) {
-    if (isNetworkError(err)) return localApartments
+    if (isNetworkError(err)) {
+      return localApartments.filter(a => !pendingDeleteIds.has(a.id))
+    }
     throw err
   }
 }
@@ -111,6 +120,7 @@ export async function updateApartment(id, data) {
 
 export async function deleteApartment(id) {
   await removeApartment(id)
+  await dequeueByEntity(id)
 
   if (isTempId(id)) return
 

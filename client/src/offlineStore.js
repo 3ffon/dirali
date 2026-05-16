@@ -181,6 +181,18 @@ export async function updateQueueItem(id, updates) {
   if (item) await db.put('syncQueue', { ...item, ...updates })
 }
 
+export async function dequeueByEntity(entityId) {
+  const db = await getDb()
+  const all = await db.getAll('syncQueue')
+  const tx = db.transaction('syncQueue', 'readwrite')
+  for (const item of all) {
+    if (item.entityId === entityId || item.tempId === entityId) {
+      await tx.store.delete(item.id)
+    }
+  }
+  await tx.done
+}
+
 export async function clearAll() {
   const db = await getDb()
   const tx = db.transaction(

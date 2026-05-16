@@ -17,6 +17,9 @@ function SyncIndicator() {
   } else if (!isOnline) {
     dotClass += ' sync-dot--offline'
     label = 'אופליין'
+  } else if (pendingCount > 0) {
+    dotClass += ' sync-dot--pending'
+    label = `ממתין לסנכרון (${pendingCount})`
   }
 
   return (

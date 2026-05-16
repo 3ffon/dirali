@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import TopBar from './components/TopBar'
 import HomePage from './pages/HomePage'
@@ -7,8 +8,12 @@ import BrokersPage from './pages/BrokersPage'
 import BrokerMessagesPage from './pages/BrokerMessagesPage'
 import UserProfilePage from './pages/UserProfilePage'
 import MapPage from './pages/MapPage'
+import { fetchBrokers } from './api'
 
 function App() {
+  useEffect(() => {
+    fetchBrokers().catch(() => {})
+  }, [])
   return (
     <div className="app-layout">
       <TopBar />
