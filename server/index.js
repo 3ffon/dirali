@@ -18,6 +18,20 @@ const PORT = process.env.PORT || 3001;
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors());
+
+if (process.env.AUTH_PASSWORD) {
+  app.use((req, res, next) => {
+    const auth = req.headers.authorization;
+    if (auth && auth.startsWith('Basic ')) {
+      const decoded = Buffer.from(auth.slice(6), 'base64').toString();
+      const password = decoded.includes(':') ? decoded.split(':').slice(1).join(':') : decoded;
+      if (password === process.env.AUTH_PASSWORD) return next();
+    }
+    res.set('WWW-Authenticate', 'Basic realm="dira-li"');
+    res.status(401).send('Unauthorized');
+  });
+}
+
 app.use(express.json({ limit: '1mb' }));
 app.use('/api/', rateLimit({ windowMs: 15 * 60 * 1000, max: 300 }));
 

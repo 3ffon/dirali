@@ -8,3 +8,4 @@ server/uploads/*
 data/
 .wwebjs_cache
 db-migration/
+public/
