@@ -8,6 +8,7 @@
     "server:dev": "cd server && node --watch index.js",
     "client": "cd client && npm run dev",
     "build": "cd client && npm run build",
+    "preview": "cd client && npm run build && cd .. && npm run server",
     "install-all": "npm install && cd server && npm install && cd ../client && npm install",
     "docker:build": "docker build -t dirali .",
     "docker:run": "docker run --rm -p 3002:3002 -v ./data/uploads:/app/uploads -v ./data/db:/app/data dirali"

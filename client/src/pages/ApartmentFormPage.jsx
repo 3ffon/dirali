@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { fetchApartment, fetchQuestions, createApartment, updateApartment, saveAnswers, uploadImages, fetchBrokers } from '../api'
+import { fetchApartment, fetchQuestions, createApartment, updateApartment, saveAnswers, uploadImages, fetchBrokers, isOnline, onIdRemap } from '../api'
 import QuestionField from '../components/QuestionField'
 import ImageUploader from '../components/ImageUploader'
 import PlacesAutocomplete from '../components/PlacesAutocomplete'
@@ -45,31 +45,43 @@ function ApartmentFormPage() {
 
       if (id) {
         const apt = await fetchApartment(id)
-        setMeta({
-          address: apt.address || '',
-          neighborhood: apt.neighborhood || '',
-          visit_date: apt.visit_date ? apt.visit_date.split('T')[0] : '',
-          asking_price: apt.asking_price || '',
-          broker_id: apt.broker_id || '',
-          overall_rating: apt.overall_rating || '',
-          notes: apt.notes || '',
-          latitude: apt.latitude || null,
-          longitude: apt.longitude || null,
-          pros: apt.pros || '[]',
-          cons: apt.cons || '[]',
-          deal_breakers: apt.deal_breakers || '[]',
-        })
-        const ansMap = {}
-        for (const a of apt.Answers || []) {
-          ansMap[a.question_id] = { value: a.value, notes: a.notes }
+        if (apt) {
+          setMeta({
+            address: apt.address || '',
+            neighborhood: apt.neighborhood || '',
+            visit_date: apt.visit_date ? apt.visit_date.split('T')[0] : '',
+            asking_price: apt.asking_price || '',
+            broker_id: apt.broker_id || '',
+            overall_rating: apt.overall_rating || '',
+            notes: apt.notes || '',
+            latitude: apt.latitude || null,
+            longitude: apt.longitude || null,
+            pros: apt.pros || '[]',
+            cons: apt.cons || '[]',
+            deal_breakers: apt.deal_breakers || '[]',
+          })
+          const ansMap = {}
+          for (const a of apt.Answers || []) {
+            ansMap[a.question_id] = { value: a.value, notes: a.notes }
+          }
+          setAnswers(ansMap)
+          setImages(apt.Images || [])
         }
-        setAnswers(ansMap)
-        setImages(apt.Images || [])
       }
       setLoading(false)
     }
     load()
   }, [id])
+
+  useEffect(() => {
+    const unsub = onIdRemap((tempId, realId) => {
+      if (apartmentId === tempId) {
+        setApartmentId(realId)
+        window.history.replaceState(null, '', `/apartments/${realId}/edit`)
+      }
+    })
+    return unsub
+  }, [apartmentId])
 
   const doSave = useCallback(async () => {
     const currentMeta = metaRef.current
@@ -105,7 +117,7 @@ function ApartmentFormPage() {
         await saveAnswers(aptId, ansArray)
       }
 
-      setSaveStatus('saved')
+      setSaveStatus(isOnline() ? 'saved' : 'saved-local')
       setTimeout(() => setSaveStatus(''), 2000)
     } catch (e) {
       console.error('Save error', e)
@@ -156,8 +168,8 @@ function ApartmentFormPage() {
 
   return (
     <div className="form-layout">
-      <div className={`save-indicator ${saveStatus === 'saved' ? 'visible' : ''}`}>
-        ✓ נשמר
+      <div className={`save-indicator ${saveStatus === 'saved' || saveStatus === 'saved-local' ? 'visible' : ''} ${saveStatus === 'saved-local' ? 'save-indicator--local' : ''}`}>
+        {saveStatus === 'saved-local' ? '✓ נשמר מקומית' : '✓ נשמר'}
       </div>
 
       <div className="page-actions-bar">
