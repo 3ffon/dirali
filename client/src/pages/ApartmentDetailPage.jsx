@@ -7,6 +7,7 @@ function ApartmentDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const cameraRef = useRef(null);
+  const galleryRef = useRef(null);
   const [apartment, setApartment] = useState(null);
   const [questions, setQuestions] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -105,6 +106,9 @@ function ApartmentDetailPage() {
           <button type="button" className="icon-btn icon-btn-camera" onClick={() => cameraRef.current.click()} title="צלם">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </button>
+          <button type="button" className="icon-btn icon-btn-upload" onClick={() => galleryRef.current.click()} title="העלאה">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </button>
           <Link to={`/apartments/${id}/edit`} className="icon-btn icon-btn-edit" title="עריכה">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </Link>
@@ -115,8 +119,16 @@ function ApartmentDetailPage() {
         <input
           ref={cameraRef}
           type="file"
-          accept="image/*"
+          accept="image/*,video/*"
           capture="environment"
+          style={{ display: 'none' }}
+          onChange={e => { handleCameraUpload(e.target.files); e.target.value = '' }}
+        />
+        <input
+          ref={galleryRef}
+          type="file"
+          accept="image/*,video/*,application/pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,.txt"
+          multiple
           style={{ display: 'none' }}
           onChange={e => { handleCameraUpload(e.target.files); e.target.value = '' }}
         />
