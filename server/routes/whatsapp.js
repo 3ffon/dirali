@@ -30,7 +30,8 @@ router.get('/messages/:phone', async (req, res) => {
     }
     res.json(messages);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('[WhatsApp] Messages error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch messages' });
   }
 });
 
@@ -50,7 +51,7 @@ router.get('/media', async (req, res) => {
     res.send(buffer);
   } catch (err) {
     console.error('[WhatsApp] Media download error:', messageId, err.message);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Failed to download media' });
   }
 });
 
@@ -64,7 +65,7 @@ router.post('/parse', async (req, res) => {
     res.json(apartment);
   } catch (err) {
     console.error('[WhatsApp] Parse error:', err.message);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Failed to parse messages' });
   }
 });
 
