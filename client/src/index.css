@@ -27,7 +27,8 @@ html, body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  
+  touch-action: pan-x pan-y;
+  background: #ffffff;
 }
 
 body {
@@ -44,21 +45,30 @@ body {
   margin: 0 auto;
   padding: 0;
   height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
   word-break: break-word;
 }
 
-.home-layout {
+.app-layout {
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
 }
 
-.home-layout .header {
-  flex-shrink: 0;
+.app-content {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.home-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .apartment-list {
@@ -74,6 +84,30 @@ body {
   height: 40%;
   width: 100%;
   border-top: 1px solid var(--border);
+}
+
+.map-controls {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+
+.map-ctrl-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  background: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 a {
@@ -117,6 +151,48 @@ input:focus, textarea:focus, select:focus {
 textarea {
   resize: vertical;
   min-height: 80px;
+}
+
+.global-topbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  padding-top: calc(env(safe-area-inset-top) + 10px);
+  background: linear-gradient(to bottom, #4F46E5, #7C3AED);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.topbar-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.topbar-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.page-actions-bar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-actions-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
 }
 
 .header {
@@ -340,6 +416,22 @@ textarea {
   justify-content: center;
 }
 
+.share-fab {
+  position: fixed;
+  bottom: 14px;
+  left: 14px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #4F46E5, #7C3AED);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+}
+
 .upload-buttons {
   display: flex;
   gap: 8px;
@@ -384,7 +476,7 @@ textarea {
 .form-layout {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1 1 0;
   overflow: hidden;
 }
 
@@ -394,7 +486,6 @@ textarea {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  padding-top: calc(env(safe-area-inset-top) + 8px);
   border-bottom: 1px solid var(--border);
   background: var(--bg);
 }
@@ -556,11 +647,12 @@ textarea {
 .apartment-card .address {
   font-weight: 600;
   font-size: 1rem;
+  color: var(--primary);
 }
 
 .apartment-card .price {
   font-weight: 600;
-  color: var(--primary);
+  color: var(--success);
   font-size: 0.9rem;
 }
 
@@ -575,7 +667,8 @@ textarea {
 .detail-layout {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -594,8 +687,6 @@ textarea {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  padding-top: calc(env(safe-area-inset-top) + 8px);
-  /* background-color: rgb(197, 197, 197); */
 }
 
 .sub-detail-topbar h2 {
@@ -635,16 +726,17 @@ textarea {
 
 .image-strip {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   padding-bottom: 4px;
 }
 
 .image-strip .image-item {
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   cursor: pointer;
 }
 
@@ -660,71 +752,336 @@ textarea {
   cursor: pointer;
 }
 
-.image-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: rgba(0, 0, 0, 0.92);
+/* Navigation menu */
+.nav-menu {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-link {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.35);
+  color: white;
+}
+
+.nav-burger {
+  display: none;
+  position: relative;
+}
+
+.burger-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 8px;
+}
+
+.burger-btn span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  min-width: 140px;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  color: var(--text);
+  transition: background 0.15s;
+}
+
+.dropdown-item:hover {
+  background: var(--primary-light);
+}
+
+@media (max-width: 480px) {
+  .nav-menu {
+    display: none;
+  }
+  .nav-burger {
+    display: block;
+  }
+}
+
+/* Brokers page */
+.broker-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.broker-name {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 2px;
+}
+
+.broker-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+}
+
+.broker-detail {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.broker-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.icon-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.image-overlay-img {
-  max-width: 90%;
-  max-height: 80vh;
-  object-fit: contain;
-  border-radius: 4px;
-  touch-action: pinch-zoom;
-}
-
-.image-overlay-close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
   border: none;
-  font-size: 24px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+}
+
+.icon-btn-edit {
+  background: #e8f0fe;
+  color: #1a73e8;
+}
+
+.icon-btn-edit:hover {
+  background: #d2e3fc;
+  color: #1557b0;
+}
+
+.icon-btn-call {
+  background: #e6f4ea;
+  color: #1e8e3e;
+}
+
+.icon-btn-call:hover {
+  background: #ceead6;
+  color: #137333;
+}
+
+.icon-btn-camera {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.icon-btn-camera:hover {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.icon-btn-danger {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.icon-btn-danger:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+}
+
+.broker-form .form-group {
+  margin-bottom: 12px;
+}
+
+.broker-form .form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.broker-item {
+  margin-bottom: 12px;
+}
+
+.broker-card {
+  cursor: pointer;
+}
+
+.broker-apartments {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 8px 12px;
+}
+
+.broker-apt-link {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  z-index: 1001;
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.9rem;
 }
 
-.image-overlay-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  border: none;
-  font-size: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1001;
+.broker-apt-link:last-child {
+  border-bottom: none;
 }
 
-.image-overlay-prev {
-  left: 12px;
+.broker-apt-link:hover {
+  color: var(--primary);
 }
 
-.image-overlay-next {
-  right: 12px;
-}
-
-.image-overlay-counter {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: rgba(255, 255, 255, 0.7);
+.broker-apt-price {
+  color: var(--primary);
+  font-weight: 500;
   font-size: 0.85rem;
 }
+
+.broker-no-apts {
+  padding: 8px 4px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.broker-name-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.broker-name-link:hover {
+  text-decoration: underline;
+}
+
+/* WhatsApp Messages */
+.whatsapp-status-banner {
+  text-align: center;
+  padding: 24px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.qr-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.qr-image {
+  width: 250px;
+  height: 250px;
+  border-radius: 8px;
+}
+
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.message-media {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+
+.message-media img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.message-type-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.message-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: box-shadow 0.15s, outline 0.15s;
+  user-select: none;
+}
+
+.message-selected {
+  outline: 2px solid var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.message-sent {
+  align-self: flex-start;
+  background: #dcf8c6;
+  border-bottom-left-radius: 4px;
+}
+
+.message-received {
+  align-self: flex-end;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-bottom-right-radius: 4px;
+}
+
+.message-body {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.message-time {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+

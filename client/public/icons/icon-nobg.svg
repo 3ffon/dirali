@@ -1,0 +1,18 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Roof -->
+  <path d="M 256 108 L 408 232 L 104 232 Z" fill="#FFFFFF"/>
+  <!-- Building body -->
+  <rect x="128" y="232" width="256" height="184" rx="8" fill="#FFFFFF"/>
+
+  <!-- Windows row 1 -->
+  <rect x="160" y="260" width="44" height="44" rx="6" fill="#4F46E5"/>
+  <rect x="234" y="260" width="44" height="44" rx="6" fill="#4F46E5"/>
+  <rect x="308" y="260" width="44" height="44" rx="6" fill="#4F46E5"/>
+
+  <!-- Door / large checkmark area -->
+  <rect x="200" y="328" width="112" height="88" rx="8" fill="#7C3AED"/>
+  <!-- Checkmark inside door -->
+  <path d="M 222 372 L 246 396 L 290 348"
+        stroke="#FFFFFF" stroke-width="14"
+        stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

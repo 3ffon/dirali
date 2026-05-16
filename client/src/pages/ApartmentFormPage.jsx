@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
-import { fetchApartment, fetchQuestions, createApartment, updateApartment, saveAnswers, uploadImages } from '../api'
+import { useParams, Link } from 'react-router-dom'
+import { fetchApartment, fetchQuestions, createApartment, updateApartment, saveAnswers, uploadImages, fetchBrokers } from '../api'
 import QuestionField from '../components/QuestionField'
 import ImageUploader from '../components/ImageUploader'
 import PlacesAutocomplete from '../components/PlacesAutocomplete'
@@ -9,16 +9,15 @@ const today = () => new Date().toISOString().split('T')[0]
 
 function ApartmentFormPage() {
   const { id } = useParams()
-  const navigate = useNavigate()
-  const isNew = !id
 
   const [questions, setQuestions] = useState(null)
   const [meta, setMeta] = useState({
     address: '', neighborhood: '', visit_date: today(), asking_price: '',
-    agent_name: '', agent_phone: '', overall_rating: '', notes: '',
+    broker_id: '', overall_rating: '', notes: '',
     latitude: null, longitude: null,
     pros: '[]', cons: '[]', deal_breakers: '[]',
   })
+  const [brokers, setBrokers] = useState([])
   const [answers, setAnswers] = useState({})
   const [images, setImages] = useState([])
   const [apartmentId, setApartmentId] = useState(id || null)
@@ -30,13 +29,19 @@ function ApartmentFormPage() {
   const metaRef = useRef(meta)
   const answersRef = useRef(answers)
 
-  metaRef.current = meta
-  answersRef.current = answers
+  useEffect(() => {
+    metaRef.current = meta
+  }, [meta])
+
+  useEffect(() => {
+    answersRef.current = answers
+  }, [answers])
 
   useEffect(() => {
     const load = async () => {
-      const q = await fetchQuestions()
+      const [q, b] = await Promise.all([fetchQuestions(), fetchBrokers()])
       setQuestions(q)
+      setBrokers(b)
 
       if (id) {
         const apt = await fetchApartment(id)
@@ -45,8 +50,7 @@ function ApartmentFormPage() {
           neighborhood: apt.neighborhood || '',
           visit_date: apt.visit_date ? apt.visit_date.split('T')[0] : '',
           asking_price: apt.asking_price || '',
-          agent_name: apt.agent_name || '',
-          agent_phone: apt.agent_phone || '',
+          broker_id: apt.broker_id || '',
           overall_rating: apt.overall_rating || '',
           notes: apt.notes || '',
           latitude: apt.latitude || null,
@@ -75,23 +79,21 @@ function ApartmentFormPage() {
 
     try {
       let aptId = apartmentId
+      const payload = {
+        ...currentMeta,
+        asking_price: currentMeta.asking_price ? parseInt(currentMeta.asking_price) : null,
+        overall_rating: currentMeta.overall_rating ? parseInt(currentMeta.overall_rating) : null,
+        visit_date: currentMeta.visit_date || null,
+        broker_id: currentMeta.broker_id || null,
+      }
+
       if (!aptId) {
-        const created = await createApartment({
-          ...currentMeta,
-          asking_price: currentMeta.asking_price ? parseInt(currentMeta.asking_price) : null,
-          overall_rating: currentMeta.overall_rating ? parseInt(currentMeta.overall_rating) : null,
-          visit_date: currentMeta.visit_date || null,
-        })
+        const created = await createApartment(payload)
         aptId = created.id
         setApartmentId(aptId)
         window.history.replaceState(null, '', `/apartments/${aptId}/edit`)
       } else {
-        await updateApartment(aptId, {
-          ...currentMeta,
-          asking_price: currentMeta.asking_price ? parseInt(currentMeta.asking_price) : null,
-          overall_rating: currentMeta.overall_rating ? parseInt(currentMeta.overall_rating) : null,
-          visit_date: currentMeta.visit_date || null,
-        })
+        await updateApartment(aptId, payload)
       }
 
       const ansArray = Object.entries(currentAnswers).map(([question_id, data]) => ({
@@ -132,7 +134,7 @@ function ApartmentFormPage() {
     if (!confirm('לאפס את כל הטופס?')) return
     setMeta({
       address: '', neighborhood: '', visit_date: today(), asking_price: '',
-      agent_name: '', agent_phone: '', overall_rating: '', notes: '',
+      broker_id: '', overall_rating: '', notes: '',
       latitude: null, longitude: null,
       pros: '[]', cons: '[]', deal_breakers: '[]',
     })
@@ -158,13 +160,14 @@ function ApartmentFormPage() {
         ✓ נשמר
       </div>
 
-      <div className="form-topbar">
+      <div className="page-actions-bar">
         <Link to={apartmentId ? `/apartments/${apartmentId}` : '/'} className="back-link">
           → חזרה
         </Link>
+        <span className="page-actions-title">{apartmentId ? 'עריכת דירה' : 'דירה חדשה'}</span>
         {apartmentId && (
-          <button type="button" className="btn btn-secondary" style={{ marginRight: 'auto' }} onClick={() => cameraRef.current.click()}>
-            📸
+          <button type="button" className="icon-btn icon-btn-camera" style={{ marginRight: 'auto' }} onClick={() => cameraRef.current.click()} title="צלם">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </button>
         )}
         <input
@@ -243,21 +246,17 @@ function ApartmentFormPage() {
               </div>
             </div>
 
-            <div className="question-field">
-              <label>שם סוכן/מתווך</label>
-              <input
-                value={meta.agent_name}
-                onChange={e => handleMetaChange('agent_name', e.target.value)}
-              />
-            </div>
-
-            <div className="question-field">
-              <label>טלפון סוכן</label>
-              <input
-                type="tel"
-                value={meta.agent_phone}
-                onChange={e => handleMetaChange('agent_phone', e.target.value)}
-              />
+            <div className="full-width question-field">
+              <label>מתווך</label>
+              <select
+                value={meta.broker_id}
+                onChange={e => handleMetaChange('broker_id', e.target.value ? parseInt(e.target.value) : null)}
+              >
+                <option value="">ללא מתווך</option>
+                {brokers.map(b => (
+                  <option key={b.id} value={b.id}>{b.full_name}</option>
+                ))}
+              </select>
             </div>
 
             <div className="full-width question-field">
@@ -297,6 +296,7 @@ function ApartmentFormPage() {
         {apartmentId && (
           <ImageUploader
             apartmentId={apartmentId}
+            address={meta.address}
             images={images}
             onUpdate={setImages}
           />

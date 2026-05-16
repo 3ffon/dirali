@@ -60,3 +60,46 @@ export function getImageUrl(imageId) {
 export function fetchQuestions() {
   return request('/questions');
 }
+
+export function fetchBrokers() {
+  return request('/brokers');
+}
+
+export function createBroker(data) {
+  return request('/brokers', { method: 'POST', body: JSON.stringify(data) });
+}
+
+export function updateBroker(id, data) {
+  return request(`/brokers/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+}
+
+export function deleteBroker(id) {
+  return request(`/brokers/${id}`, { method: 'DELETE' });
+}
+
+export function fetchUserProfile() {
+  return request('/users/profile');
+}
+
+export function updateUserProfile(data) {
+  return request('/users/profile', { method: 'PUT', body: JSON.stringify(data) });
+}
+
+export function fetchWhatsAppStatus() {
+  return request('/whatsapp/status');
+}
+
+export function initializeWhatsApp() {
+  return request('/whatsapp/initialize', { method: 'POST' });
+}
+
+export function fetchWhatsAppMessages(phone) {
+  return request(`/whatsapp/messages/${encodeURIComponent(phone)}`);
+}
+
+export function parseMessagesToApartment(messages, brokerId) {
+  return request('/whatsapp/parse', {
+    method: 'POST',
+    body: JSON.stringify({ messages, brokerId }),
+  });
+}

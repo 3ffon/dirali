@@ -1,54 +1,39 @@
-import { useState } from 'react'
+import { PhotoProvider, PhotoView } from 'react-photo-view'
+import 'react-photo-view/dist/react-photo-view.css'
 import { getImageUrl } from '../api'
+import { shareOrDownload, buildImageFilename } from '../utils'
 
-function ImageViewer({ images, thumbnailStrip }) {
-  const [viewIndex, setViewIndex] = useState(null)
-
+function ImageViewer({ images, address, thumbnailStrip }) {
   if (!images || images.length === 0) return null
 
-  const close = () => setViewIndex(null)
-
-  const prev = (e) => {
-    e.stopPropagation()
-    setViewIndex((viewIndex - 1 + images.length) % images.length)
-  }
-
-  const next = (e) => {
-    e.stopPropagation()
-    setViewIndex((viewIndex + 1) % images.length)
-  }
-
   return (
-    <>
-      <div className={thumbnailStrip ? 'image-strip' : 'image-grid'}>
-        {images.map((img, i) => (
-          <div key={img.id} className="image-item" onClick={() => setViewIndex(i)}>
-            <img src={getImageUrl(img.id)} alt={img.original_name} />
+    <PhotoProvider
+      overlayRender={({ index }) => {
+        const img = images[index]
+        return (
+          <div
+            onClick={() => {
+              shareOrDownload(getImageUrl(img.id), buildImageFilename(address, img.id, img.original_name))
+            }}
+            className="share-fab"
+          >
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="white">
+              <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z" />
+            </svg>
           </div>
+        )
+      }}
+    >
+      <div className={thumbnailStrip ? 'image-strip' : 'image-grid'}>
+        {images.map((img) => (
+          <PhotoView key={img.id} src={getImageUrl(img.id)}>
+            <div className="image-item">
+              <img src={getImageUrl(img.id)} alt={img.original_name} />
+            </div>
+          </PhotoView>
         ))}
       </div>
-
-      {viewIndex !== null && (
-        <div className="image-overlay" onClick={close}>
-          <button className="image-overlay-close" onClick={close}>×</button>
-          {images.length > 1 && (
-            <>
-              <button className="image-overlay-nav image-overlay-prev" onClick={prev}>‹</button>
-              <button className="image-overlay-nav image-overlay-next" onClick={next}>›</button>
-            </>
-          )}
-          <img
-            src={getImageUrl(images[viewIndex].id)}
-            alt={images[viewIndex].original_name}
-            className="image-overlay-img"
-            onClick={e => e.stopPropagation()}
-          />
-          <div className="image-overlay-counter">
-            {viewIndex + 1} / {images.length}
-          </div>
-        </div>
-      )}
-    </>
+    </PhotoProvider>
   )
 }
 

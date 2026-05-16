@@ -1,10 +1,12 @@
+/* global google */
 import { useEffect, useRef, useState } from 'react'
 import { loadGoogleMaps } from '../loadGoogleMaps'
 
-function ApartmentsMap({ apartments }) {
+function ApartmentsMap({ apartments, userLocation }) {
   const mapRef = useRef(null)
   const mapInstance = useRef(null)
   const markersRef = useRef([])
+  const userMarkerRef = useRef(null)
   const [mapReady, setMapReady] = useState(false)
 
   useEffect(() => {
@@ -72,6 +74,30 @@ function ApartmentsMap({ apartments }) {
       mapInstance.current.setZoom(14)
     }
   }, [apartments, mapReady])
+
+  useEffect(() => {
+    if (!mapReady || !mapInstance.current) return
+    if (!userLocation || !userLocation.latitude || !userLocation.longitude) return
+
+    const { AdvancedMarkerElement, PinElement } = google.maps.marker
+
+    if (userMarkerRef.current) {
+      userMarkerRef.current.map = null
+    }
+
+    const pin = new PinElement({
+      background: '#7C3AED',
+      borderColor: '#4F46E5',
+      glyphColor: '#ffffff',
+    })
+
+    userMarkerRef.current = new AdvancedMarkerElement({
+      map: mapInstance.current,
+      position: { lat: userLocation.latitude, lng: userLocation.longitude },
+      title: 'הכתובת שלי',
+      content: pin.element,
+    })
+  }, [userLocation, mapReady])
 
   return <div ref={mapRef} className="apartments-map" />
 }

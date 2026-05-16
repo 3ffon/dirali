@@ -1,3 +1,4 @@
+/* global google */
 import { useEffect, useRef, useState } from 'react'
 import { loadGoogleMaps } from '../loadGoogleMaps'
 
@@ -6,7 +7,8 @@ function PlacesAutocomplete({ value, onChange, onPlaceSelect, placeholder, types
   const elRef = useRef(null)
   const [ready, setReady] = useState(false)
   const [fallback, setFallback] = useState(false)
-  const [searching, setSearching] = useState(!value)
+  const [userSearching, setUserSearching] = useState(false)
+  const searching = userSearching || !value
 
   useEffect(() => {
     loadGoogleMaps()
@@ -46,7 +48,7 @@ function PlacesAutocomplete({ value, onChange, onPlaceSelect, placeholder, types
 
         onChange(address)
         onPlaceSelect({ address, lat, lng })
-        setSearching(false)
+        setUserSearching(false)
 
         const inner = el.querySelector('input')
         if (inner) inner.value = ''
@@ -54,10 +56,11 @@ function PlacesAutocomplete({ value, onChange, onPlaceSelect, placeholder, types
     }
 
     init()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready])
 
   const handleChange = () => {
-    setSearching(true)
+    setUserSearching(true)
     requestAnimationFrame(() => {
       const inner = elRef.current?.querySelector('input')
       if (inner) {

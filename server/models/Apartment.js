@@ -9,6 +9,7 @@ module.exports = (sequelize) => {
     asking_price: { type: DataTypes.INTEGER },
     agent_name: { type: DataTypes.TEXT },
     agent_phone: { type: DataTypes.TEXT },
+    broker_id: { type: DataTypes.INTEGER },
     latitude: { type: DataTypes.REAL },
     longitude: { type: DataTypes.REAL },
     overall_rating: { type: DataTypes.INTEGER },

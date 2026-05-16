@@ -1,17 +1,39 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { fetchApartments, getImageUrl } from '../api'
+import { fetchApartments, fetchUserProfile } from '../api'
 import ApartmentsMap from '../components/ApartmentsMap'
+
+const scrollKey = 'home-scroll-pos'
 
 function HomePage() {
   const [apartments, setApartments] = useState([])
+  const [userLocation, setUserLocation] = useState(null)
   const [loading, setLoading] = useState(true)
+  const listRef = useRef(null)
 
   useEffect(() => {
     fetchApartments()
       .then(setApartments)
       .finally(() => setLoading(false))
+    fetchUserProfile().then(user => {
+      if (user.latitude && user.longitude) {
+        setUserLocation({ latitude: user.latitude, longitude: user.longitude })
+      }
+    }).catch(() => {})
   }, [])
+
+  useEffect(() => {
+    if (loading) return
+    const el = listRef.current
+    if (!el) return
+
+    const saved = sessionStorage.getItem(scrollKey)
+    if (saved) el.scrollTop = parseInt(saved, 10)
+
+    const handleScroll = () => sessionStorage.setItem(scrollKey, el.scrollTop)
+    el.addEventListener('scroll', handleScroll, { passive: true })
+    return () => el.removeEventListener('scroll', handleScroll)
+  }, [loading])
 
   const formatPrice = (price) => {
     if (!price) return null
@@ -27,12 +49,7 @@ function HomePage() {
 
   return (
     <div className="home-layout">
-      <div className="header">
-        <h1>🏠 דירה לי</h1>
-        <Link to="/apartments/new" className="btn btn-primary">+ דירה חדשה</Link>
-      </div>
-
-      <div className="apartment-list">
+      <div className="apartment-list" ref={listRef}>
         {apartments.length === 0 ? (
           <div className="empty-state">
             <div className="icon">🏘️</div>
@@ -59,7 +76,7 @@ function HomePage() {
         )}
       </div>
 
-      <ApartmentsMap apartments={apartments} />
+      <ApartmentsMap apartments={apartments} userLocation={userLocation} />
     </div>
   )
 }

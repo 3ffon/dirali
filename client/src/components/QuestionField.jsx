@@ -1,4 +1,5 @@
-import { useState } from 'react'
+
+
 
 function QuestionField({ question, value, notes, onChange }) {
   const handleChange = (newValue, newNotes) => {
@@ -74,7 +75,7 @@ function QuestionField({ question, value, notes, onChange }) {
         </div>
       )
 
-    case 'multi_select':
+    case 'multi_select': {
       const selected = value ? JSON.parse(value) : []
       return (
         <div className="question-field">
@@ -96,7 +97,7 @@ function QuestionField({ question, value, notes, onChange }) {
           </div>
         </div>
       )
-
+    }
     case 'rating_1_5':
       return (
         <div className="question-field">

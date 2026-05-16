@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { Apartment, Answer, Image } = require('../models');
+const { Apartment, Answer, Image, Broker } = require('../models');
 
 router.get('/', async (req, res) => {
   const apartments = await Apartment.findAll({
     order: [['created_at', 'DESC']],
-    include: [{ model: Image, attributes: ['id'] }],
+    include: [{ model: Image, attributes: ['id'] }, { model: Broker }],
   });
   res.json(apartments);
 });
@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const apartment = await Apartment.findByPk(req.params.id, {
-    include: [Answer, Image],
+    include: [Answer, Image, Broker],
   });
   if (!apartment) return res.status(404).json({ error: 'Not found' });
   res.json(apartment);

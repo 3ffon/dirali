@@ -57,7 +57,7 @@ function ApartmentDetailPage() {
       case "multi_select":
         try {
           displayValue = JSON.parse(answer.value).join(", ");
-        } catch {}
+        } catch { /* invalid JSON, use raw value */ }
         break;
       case "rating_1_5":
         displayValue = answer.value
@@ -96,20 +96,20 @@ function ApartmentDetailPage() {
 
   return (
     <div className="detail-layout">
-      <div className="detail-topbar">
+      <div className="page-actions-bar">
         <Link to="/" className="back-link">
           → חזרה
         </Link>
 
         <div style={{ display: "flex", gap: 8, marginRight: "auto" }}>
-          <button type="button" className="btn btn-secondary" onClick={() => cameraRef.current.click()}>
-            📸
+          <button type="button" className="icon-btn icon-btn-camera" onClick={() => cameraRef.current.click()} title="צלם">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </button>
-          <Link to={`/apartments/${id}/edit`} className="btn btn-secondary">
-            ✏️
+          <Link to={`/apartments/${id}/edit`} className="icon-btn icon-btn-edit" title="עריכה">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </Link>
-          <button onClick={handleDelete} className="btn btn-danger">
-            🗑️
+          <button onClick={handleDelete} className="icon-btn icon-btn-danger" title="מחק">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
           </button>
         </div>
         <input
@@ -155,12 +155,11 @@ function ApartmentDetailPage() {
               </div>
             </div>
           )}
-          {apartment.agent_name && (
+          {apartment.Broker && (
             <div className="detail-field">
-              <div className="label">סוכן</div>
+              <div className="label">מתווך</div>
               <div className="value">
-                {apartment.agent_name}{" "}
-                {apartment.agent_phone && `(${apartment.agent_phone})`}
+                <Link to="/brokers">{apartment.Broker.full_name}</Link>
               </div>
             </div>
           )}
@@ -196,7 +195,7 @@ function ApartmentDetailPage() {
 
       {apartment.Images && apartment.Images.length > 0 && (
         <div className="detail-footer">
-          <ImageViewer images={apartment.Images} thumbnailStrip />
+          <ImageViewer images={apartment.Images} address={apartment.address} thumbnailStrip />
         </div>
       )}
     </div>

@@ -1,11 +1,4 @@
 {
-  "metadata": {
-    "title": "Apartment Viewing Checklist",
-    "title_he": "רשימת שאלות לביקור בדירה",
-    "version": "1.0",
-    "language": "he",
-    "buyers": ["עמית", "ענבר"]
-  },
   "categories": [
     {
       "id": "basic_info",
@@ -21,18 +14,17 @@
       ]
     },
     {
-      "id": "legal_status",
-      "name_he": "מצב משפטי ובעלות",
-      "icon": "🔑",
+      "id": "parking_storage_balcony",
+      "name_he": "חניה, מחסן, מרפסת",
+      "icon": "🅿️",
       "questions": [
-        { "id": "tabu_owner", "question_he": "על שם מי הדירה רשומה בטאבו?", "answer_type": "text" },
-        { "id": "owners_count", "question_he": "כמה בעלים יש? כולם מסכימים למכור?", "answer_type": "text" },
-        { "id": "liens", "question_he": "האם יש הערות אזהרה, עיקולים, משכנתא קיימת?", "answer_type": "boolean_with_notes" },
-        { "id": "building_violations", "question_he": "האם יש חריגות בנייה? היתרי בנייה תקינים?", "answer_type": "boolean_with_notes" },
-        { "id": "registered_residential", "question_he": "האם הדירה רשומה כדירת מגורים (לא עסק/מחסן)?", "answer_type": "boolean" },
-        { "id": "shared_house_registered", "question_he": "האם הבניין רשום בית משותף עם תקנון?", "answer_type": "boolean" }
+        { "id": "parking_count", "question_he": "כמה חניות? מקורה/לא? צמודה לדירה ברישום?", "answer_type": "text" },
+        { "id": "parking_location", "question_he": "איפה החניה ממוקמת? גודל?", "answer_type": "text" },
+        { "id": "storage", "question_he": "מחסן - גודל, מיקום, רשום בטאבו?", "answer_type": "text" },
+        { "id": "balcony", "question_he": "גודל המרפסת? פתוחה/סגורה? מקורה?", "answer_type": "text" }
       ]
     },
+    
     {
       "id": "ongoing_costs",
       "name_he": "עלויות שוטפות",
@@ -57,17 +49,6 @@
         { "id": "hvac", "question_he": "מערכת חימום/מיזוג - מה קיים ובאיזה מצב?", "answer_type": "text" },
         { "id": "flooring", "question_he": "מצב הריצוף - מקורי או הוחלף?", "answer_type": "text" },
         { "id": "boiler", "question_he": "בוילר - חשמלי/שמש/גז? גילו?", "answer_type": "text" }
-      ]
-    },
-    {
-      "id": "parking_storage_balcony",
-      "name_he": "חניה, מחסן, מרפסת",
-      "icon": "🅿️",
-      "questions": [
-        { "id": "parking_count", "question_he": "כמה חניות? מקורה/לא? צמודה לדירה ברישום?", "answer_type": "text" },
-        { "id": "parking_location", "question_he": "איפה החניה ממוקמת? גודל?", "answer_type": "text" },
-        { "id": "storage", "question_he": "מחסן - גודל, מיקום, רשום בטאבו?", "answer_type": "text" },
-        { "id": "balcony", "question_he": "גודל המרפסת? פתוחה/סגורה? מקורה?", "answer_type": "text" }
       ]
     },
     {
@@ -136,34 +117,19 @@
         { "id": "doc_no_debt_certificate", "question_he": "אישור היעדר חובות מהעיריה (לפני חתימה)", "answer_type": "checkbox" },
         { "id": "doc_house_bylaws", "question_he": "תקנון הבית המשותף", "answer_type": "checkbox" }
       ]
+    },
+    {
+      "id": "legal_status",
+      "name_he": "מצב משפטי ובעלות",
+      "icon": "🔑",
+      "questions": [
+        { "id": "tabu_owner", "question_he": "על שם מי הדירה רשומה בטאבו?", "answer_type": "text" },
+        { "id": "owners_count", "question_he": "כמה בעלים יש? כולם מסכימים למכור?", "answer_type": "text" },
+        { "id": "liens", "question_he": "האם יש הערות אזהרה, עיקולים, משכנתא קיימת?", "answer_type": "boolean_with_notes" },
+        { "id": "building_violations", "question_he": "האם יש חריגות בנייה? היתרי בנייה תקינים?", "answer_type": "boolean_with_notes" },
+        { "id": "registered_residential", "question_he": "האם הדירה רשומה כדירת מגורים (לא עסק/מחסן)?", "answer_type": "boolean" },
+        { "id": "shared_house_registered", "question_he": "האם הבניין רשום בית משותף עם תקנון?", "answer_type": "boolean" }
+      ]
     }
-  ],
-  "answer_type_definitions": {
-    "text": "Free text answer",
-    "number": "Numeric value",
-    "boolean": "Yes / No",
-    "boolean_with_notes": "Yes / No + optional notes field",
-    "multi_select": "Choose one or more from options array",
-    "rating_1_5": "Rating from 1 (poor) to 5 (excellent)",
-    "checkbox": "Received / Not received"
-  },
-  "property_metadata_schema": {
-    "description": "Suggested fields to track per property visit",
-    "fields": {
-      "property_id": "string (unique id, e.g. timestamp or address slug)",
-      "address": "string",
-      "neighborhood": "string",
-      "visit_date": "ISO 8601 datetime",
-      "visit_number": "integer (1st visit, 2nd visit, etc.)",
-      "asking_price": "number",
-      "agent_name": "string",
-      "agent_phone": "string",
-      "photos": "array of file paths or URLs",
-      "overall_rating": "rating_1_5",
-      "deal_breakers": "array of strings",
-      "pros": "array of strings",
-      "cons": "array of strings",
-      "follow_up_actions": "array of strings"
-    }
-  }
+  ]
 }

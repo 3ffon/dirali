@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
+    allowedHosts: ['mummified-simply-sheath.ngrok-free.dev'],
     proxy: {
       '/api': 'http://localhost:3001',
     },

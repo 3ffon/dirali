@@ -4,12 +4,15 @@ Apartment checklist app for evaluating and comparing apartments during a search.
 
 ## Features
 
-- Add apartments with metadata (address, neighborhood, price, agent, etc.)
+- Add apartments with metadata (address, neighborhood, price, broker, etc.)
 - Answer checklist questions grouped by category
-- Upload photos per apartment
-- View and compare apartments from a list
+- Upload and manage photos per apartment
+- View apartments in list and map views
+- Manage brokers and link them to apartments
+- WhatsApp integration — parse broker messages into apartment data using AI
+- Google Maps with autocomplete for addresses
 - Auto-save while editing
-- Mobile-first design
+- Mobile-first RTL (Hebrew) design
 
 ## Quick Start
 
@@ -18,7 +21,7 @@ npm run install-all
 npm run dev
 ```
 
-The app runs at `http://localhost:5173` with the API on port 3002.
+The app runs at `http://localhost:5173` with the API on port 3001.
 
 ## Docker
 
@@ -29,6 +32,10 @@ npm run docker:run
 
 ## Tech Stack
 
-- **Client:** React, Vite, React Router
-- **Server:** Express, Sequelize, SQLite
+- **Client:** React 19, Vite, React Router 7, Google Maps API
+- **Server:** Express, Sequelize, SQLite, Anthropic SDK, whatsapp-web.js
 - **Storage:** Local filesystem (uploads), SQLite (data)
+
+## Docs
+
+- [Design Language](docs/design-lang.md) — colors, icons, components, layout patterns
