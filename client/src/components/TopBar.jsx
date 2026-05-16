@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import SyncIndicator from './SyncIndicator'
 
 function TopBar() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -10,6 +11,7 @@ function TopBar() {
         <img src="/icons/icon-nobg.svg" alt="" className="topbar-icon" />
         <span className="topbar-title">דירה-לי</span>
       </Link>
+      <SyncIndicator />
       <nav className="nav-menu">
         <Link to="/" className="nav-link">דירות</Link>
         <Link to="/apartments/new" className="nav-link">דירה חדשה</Link>

@@ -1,14 +1,18 @@
 /* global google */
 import { useEffect, useRef, useState } from 'react'
 import { loadGoogleMaps } from '../loadGoogleMaps'
+import { isOnline, subscribe as onNetworkChange } from '../networkStatus'
 
 function PlacesAutocomplete({ value, onChange, onPlaceSelect, placeholder, types }) {
   const containerRef = useRef(null)
   const elRef = useRef(null)
   const [ready, setReady] = useState(false)
   const [fallback, setFallback] = useState(false)
+  const [online, setOnline] = useState(isOnline())
   const [userSearching, setUserSearching] = useState(false)
   const searching = userSearching || !value
+
+  useEffect(() => onNetworkChange(setOnline), [])
 
   useEffect(() => {
     loadGoogleMaps()
@@ -70,12 +74,12 @@ function PlacesAutocomplete({ value, onChange, onPlaceSelect, placeholder, types
     })
   }
 
-  if (fallback || !ready) {
+  if (fallback || !ready || !online) {
     return (
       <input
         value={value}
         onChange={e => onChange(e.target.value)}
-        placeholder={placeholder}
+        placeholder={placeholder || 'הקלד כתובת...'}
       />
     )
   }

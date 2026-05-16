@@ -1,7 +1,21 @@
 import { PhotoProvider, PhotoView } from 'react-photo-view'
 import 'react-photo-view/dist/react-photo-view.css'
 import { getImageUrl } from '../api'
+import { useImageUrl } from '../hooks/useImageUrl'
 import { shareOrDownload, buildImageFilename } from '../utils'
+
+function ImageViewerItem({ image }) {
+  const url = useImageUrl(image.id)
+  if (!url) return <div className="image-item image-item--loading" />
+
+  return (
+    <PhotoView src={url}>
+      <div className="image-item">
+        <img src={url} alt={image.original_name} />
+      </div>
+    </PhotoView>
+  )
+}
 
 function ImageViewer({ images, address, thumbnailStrip }) {
   if (!images || images.length === 0) return null
@@ -10,10 +24,12 @@ function ImageViewer({ images, address, thumbnailStrip }) {
     <PhotoProvider
       overlayRender={({ index }) => {
         const img = images[index]
+        const url = getImageUrl(img.id)
+        if (!url) return null
         return (
           <div
             onClick={() => {
-              shareOrDownload(getImageUrl(img.id), buildImageFilename(address, img.id, img.original_name))
+              shareOrDownload(url, buildImageFilename(address, img.id, img.original_name))
             }}
             className="share-fab"
           >
@@ -26,11 +42,7 @@ function ImageViewer({ images, address, thumbnailStrip }) {
     >
       <div className={thumbnailStrip ? 'image-strip' : 'image-grid'}>
         {images.map((img) => (
-          <PhotoView key={img.id} src={getImageUrl(img.id)}>
-            <div className="image-item">
-              <img src={getImageUrl(img.id)} alt={img.original_name} />
-            </div>
-          </PhotoView>
+          <ImageViewerItem key={img.id} image={img} />
         ))}
       </div>
     </PhotoProvider>

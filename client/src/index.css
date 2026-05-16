@@ -154,6 +154,7 @@ textarea {
 }
 
 .global-topbar {
+  position: relative;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -454,6 +455,38 @@ textarea {
 
 .save-indicator.visible {
   opacity: 1;
+}
+
+.save-indicator--local {
+  background: var(--warning, #f59e0b);
+}
+
+/* Sync indicator */
+.sync-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.sync-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sync-dot--online { background: var(--success, #22c55e); }
+.sync-dot--offline { background: var(--warning, #f59e0b); }
+.sync-dot--syncing { background: var(--success, #22c55e); animation: pulse 1s infinite; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 .empty-state {

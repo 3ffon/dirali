@@ -2,7 +2,22 @@ import { useRef } from 'react'
 import { PhotoProvider, PhotoView } from 'react-photo-view'
 import 'react-photo-view/dist/react-photo-view.css'
 import { getImageUrl, uploadImages, deleteImage } from '../api'
+import { useImageUrl } from '../hooks/useImageUrl'
 import { shareOrDownload, buildImageFilename } from '../utils'
+
+function ImageThumbnail({ image, onDelete }) {
+  const url = useImageUrl(image.id)
+  if (!url) return <div className="image-item image-item--loading" />
+
+  return (
+    <PhotoView src={url}>
+      <div className="image-item">
+        <img src={url} alt={image.original_name} />
+        <button className="delete-img" onClick={(e) => { e.stopPropagation(); onDelete(image.id) }}>×</button>
+      </div>
+    </PhotoView>
+  )
+}
 
 function ImageUploader({ apartmentId, address, images, onUpdate }) {
   const fileRef = useRef()
@@ -26,9 +41,11 @@ function ImageUploader({ apartmentId, address, images, onUpdate }) {
         <PhotoProvider
           overlayRender={({ index }) => {
             const img = images[index]
+            const url = getImageUrl(img.id)
+            if (!url) return null
             return (
               <div
-                onClick={() => shareOrDownload(getImageUrl(img.id), buildImageFilename(address, img.id, img.original_name))}
+                onClick={() => shareOrDownload(url, buildImageFilename(address, img.id, img.original_name))}
                 className="share-fab"
               >
                 <svg viewBox="0 0 24 24" width="28" height="28" fill="white">
@@ -40,12 +57,7 @@ function ImageUploader({ apartmentId, address, images, onUpdate }) {
         >
           <div className="image-grid">
             {images.map((img) => (
-              <PhotoView key={img.id} src={getImageUrl(img.id)}>
-                <div className="image-item">
-                  <img src={getImageUrl(img.id)} alt={img.original_name} />
-                  <button className="delete-img" onClick={(e) => { e.stopPropagation(); handleDelete(img.id) }}>×</button>
-                </div>
-              </PhotoView>
+              <ImageThumbnail key={img.id} image={img} onDelete={handleDelete} />
             ))}
           </div>
         </PhotoProvider>

@@ -12,6 +12,7 @@ Apartment checklist app for evaluating and comparing apartments during a search.
 - WhatsApp integration — parse broker messages into apartment data using AI
 - Google Maps with autocomplete for addresses
 - Auto-save while editing
+- **Full offline support** — create apartments, fill checklists, and take photos without signal; syncs automatically when connectivity returns
 - Mobile-first RTL (Hebrew) design
 
 ## Quick Start
