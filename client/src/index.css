@@ -1085,6 +1085,16 @@ textarea {
   color: #137333;
 }
 
+.icon-btn-share {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.icon-btn-share:hover {
+  background: #bae6fd;
+  color: #0369a1;
+}
+
 .icon-btn-danger {
   background: #fef2f2;
   color: #ef4444;

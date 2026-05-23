@@ -4,7 +4,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
-const { sequelize } = require('./models');
+const fs = require('fs');
+const { sequelize, Apartment, Image } = require('./models');
 const apartmentsRouter = require('./routes/apartments');
 const imagesRouter = require('./routes/images');
 const brokersRouter = require('./routes/brokers');
@@ -18,19 +19,6 @@ const PORT = process.env.PORT || 3001;
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors());
-
-if (process.env.AUTH_PASSWORD) {
-  app.use((req, res, next) => {
-    const auth = req.headers.authorization;
-    if (auth && auth.startsWith('Basic ')) {
-      const decoded = Buffer.from(auth.slice(6), 'base64').toString();
-      const password = decoded.includes(':') ? decoded.split(':').slice(1).join(':') : decoded;
-      if (password === process.env.AUTH_PASSWORD) return next();
-    }
-    res.set('WWW-Authenticate', 'Basic realm="dira-li"');
-    res.status(401).send('Unauthorized');
-  });
-}
 
 app.use(express.json({ limit: '1mb' }));
 app.use('/api/', rateLimit({ windowMs: 15 * 60 * 1000, max: 300 }));
@@ -55,8 +43,44 @@ app.get('/sw.js', (req, res) => {
 
 app.use(express.static(STATIC_DIR));
 
+const indexHtml = fs.readFileSync(path.join(STATIC_DIR, 'index.html'), 'utf8');
+
+app.get('/apartments/:id', async (req, res) => {
+  try {
+    const apartment = await Apartment.findByPk(req.params.id, {
+      include: [{ model: Image, limit: 1 }],
+    });
+    if (!apartment) return res.send(indexHtml);
+
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const price = apartment.asking_price
+      ? ` · ₪${Number(apartment.asking_price).toLocaleString('he-IL')}`
+      : '';
+    const title = `${apartment.address || 'דירה'}${price}`;
+    const descParts = [];
+    if (apartment.neighborhood) descParts.push(apartment.neighborhood);
+    if (apartment.overall_rating) descParts.push('★'.repeat(apartment.overall_rating));
+    const description = descParts.join(' · ') || 'דירה לי';
+
+    const ogTags = [
+      `<meta property="og:title" content="${title.replace(/"/g, '&quot;')}" />`,
+      `<meta property="og:description" content="${description.replace(/"/g, '&quot;')}" />`,
+      `<meta property="og:url" content="${baseUrl}/apartments/${apartment.id}" />`,
+      `<meta property="og:type" content="website" />`,
+    ];
+    if (apartment.Images && apartment.Images.length > 0) {
+      ogTags.push(`<meta property="og:image" content="${baseUrl}/api/images/${apartment.Images[0].id}/file" />`);
+    }
+
+    const html = indexHtml.replace('</head>', `  ${ogTags.join('\n    ')}\n  </head>`);
+    res.send(html);
+  } catch {
+    res.send(indexHtml);
+  }
+});
+
 app.get('*', (req, res) => {
-  res.sendFile(path.join(STATIC_DIR, 'index.html'));
+  res.send(indexHtml);
 });
 
 async function start() {
