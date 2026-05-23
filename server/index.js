@@ -43,16 +43,20 @@ app.get('/sw.js', (req, res) => {
 
 app.use(express.static(STATIC_DIR));
 
-const indexHtml = fs.readFileSync(path.join(STATIC_DIR, 'index.html'), 'utf8');
+let indexHtml = '';
+try {
+  indexHtml = fs.readFileSync(path.join(STATIC_DIR, 'index.html'), 'utf8');
+} catch {}
 
 app.get('/apartments/:id', async (req, res) => {
+  if (!indexHtml) return res.sendFile(path.join(STATIC_DIR, 'index.html'));
   try {
     const apartment = await Apartment.findByPk(req.params.id, {
       include: [{ model: Image, limit: 1 }],
     });
     if (!apartment) return res.send(indexHtml);
 
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
     const price = apartment.asking_price
       ? ` · ₪${Number(apartment.asking_price).toLocaleString('he-IL')}`
       : '';
@@ -69,7 +73,7 @@ app.get('/apartments/:id', async (req, res) => {
       `<meta property="og:type" content="website" />`,
     ];
     if (apartment.Images && apartment.Images.length > 0) {
-      ogTags.push(`<meta property="og:image" content="${baseUrl}/api/images/${apartment.Images[0].id}/file" />`);
+      ogTags.push(`<meta property="og:image" content="${baseUrl}/api/images/${apartment.Images[0].id}/og.jpg" />`);
     }
 
     const html = indexHtml.replace('</head>', `  ${ogTags.join('\n    ')}\n  </head>`);
@@ -80,6 +84,7 @@ app.get('/apartments/:id', async (req, res) => {
 });
 
 app.get('*', (req, res) => {
+  if (!indexHtml) return res.sendFile(path.join(STATIC_DIR, 'index.html'));
   res.send(indexHtml);
 });
 
