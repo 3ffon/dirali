@@ -56,7 +56,7 @@ router.post('/apartments/:id/images', upload.array('images', 20), async (req, re
   res.status(201).json(records);
 });
 
-router.get('/images/:id/og.jpg', async (req, res) => {
+router.get('/images/:id/og.png', async (req, res) => {
   const image = await Image.findByPk(req.params.id);
   if (!image) return res.status(404).json({ error: 'Not found' });
 
@@ -66,13 +66,19 @@ router.get('/images/:id/og.jpg', async (req, res) => {
   }
   if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File missing' });
 
-  res.setHeader('Content-Type', 'image/jpeg');
-  res.setHeader('Cache-Control', 'public, max-age=86400');
-  sharp(filePath)
-    .rotate()
-    .resize(1200, 630, { fit: 'cover' })
-    .jpeg({ quality: 70 })
-    .pipe(res);
+  try {
+    const buf = await sharp(filePath)
+      .rotate()
+      .resize(1200, 630, { fit: 'cover' })
+      .png({ palette: true })
+      .toBuffer();
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Content-Length', buf.length);
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.send(buf);
+  } catch {
+    res.status(500).end();
+  }
 });
 
 router.get('/images/:id/file', async (req, res) => {

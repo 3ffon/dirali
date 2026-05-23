@@ -60,11 +60,14 @@ app.get('/apartments/:id', async (req, res) => {
     const price = apartment.asking_price
       ? ` · ₪${Number(apartment.asking_price).toLocaleString('he-IL')}`
       : '';
-    const title = `${apartment.address || 'דירה'}${price}`;
+    const title = `דירה לי | ${apartment.address || 'דירה'}${price}`;
     const descParts = [];
-    if (apartment.neighborhood) descParts.push(apartment.neighborhood);
-    if (apartment.overall_rating) descParts.push('★'.repeat(apartment.overall_rating));
-    const description = descParts.join(' · ') || 'דירה לי';
+    if (apartment.neighborhood) descParts.push(`שכונת ${apartment.neighborhood}`);
+    if (apartment.overall_rating) descParts.push(`דירוג: ${'★'.repeat(apartment.overall_rating)}${'☆'.repeat(5 - apartment.overall_rating)}`);
+    if (apartment.visit_date) descParts.push(`ביקור: ${new Date(apartment.visit_date).toLocaleDateString('he-IL')}`);
+    if (apartment.notes) descParts.push(apartment.notes);
+    let description = descParts.join(' · ') || 'צפו בפרטי הדירה באפליקציית דירה לי';
+    if (description.length < 110) description += ' · צפו בפרטי הדירה המלאים באפליקציית דירה לי';
 
     const ogTags = [
       `<meta property="og:title" content="${title.replace(/"/g, '&quot;')}" />`,
@@ -73,7 +76,7 @@ app.get('/apartments/:id', async (req, res) => {
       `<meta property="og:type" content="website" />`,
     ];
     if (apartment.Images && apartment.Images.length > 0) {
-      ogTags.push(`<meta property="og:image" content="${baseUrl}/api/images/${apartment.Images[0].id}/og.jpg" />`);
+      ogTags.push(`<meta property="og:image" content="${baseUrl}/api/images/${apartment.Images[0].id}/og.png" />`);
     }
 
     const html = indexHtml.replace('</head>', `  ${ogTags.join('\n    ')}\n  </head>`);
