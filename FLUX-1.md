@@ -412,8 +412,13 @@ history:
     to: Todo
     user: Guy
     date: '2026-05-24T22:43:15.879Z'
+  - type: status_change
+    from: Todo
+    to: In Progress
+    user: Guy
+    date: '2026-05-24T22:43:55.124Z'
 title: Support a filter for questions
-status: Todo
+status: In Progress
 createdBy: Guy
 updatedBy: Guy
 tokenMetadata:
