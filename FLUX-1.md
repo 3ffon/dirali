@@ -1,6 +1,7 @@
 ---
-assignee: Agent
-tags: []
+assignee: Ahmed
+tags:
+  - feature
 priority: Medium
 effort: S
 implementationLink: ''
@@ -1015,10 +1016,23 @@ history:
     to: In Progress
     user: Guy
     date: '2026-05-24T22:52:29.777Z'
+  - type: status_change
+    from: In Progress
+    to: Done
+    user: Guy
+    date: '2026-05-24T22:53:59.356Z'
+  - type: activity
+    user: Guy
+    date: '2026-05-24T22:54:09.243Z'
+    comment: Updated tags to feature.
+  - type: activity
+    user: Guy
+    date: '2026-05-24T22:54:12.624Z'
+    comment: Changed assignee from Agent to Ahmed.
 title: Support a filter for questions
-status: In Progress
+status: Done
 createdBy: Guy
-updatedBy: Agent
+updatedBy: Guy
 tokenMetadata:
   inputTokens: 1317550
   outputTokens: 12676
