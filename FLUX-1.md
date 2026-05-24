@@ -417,10 +417,17 @@ history:
     to: In Progress
     user: Guy
     date: '2026-05-24T22:43:55.124Z'
+  - type: agent_session
+    sessionId: a49066cd-05ca-4a91-b465-14dcae4be4de
+    startedAt: '2026-05-24T22:46:24.393Z'
+    status: active
+    progress: []
+    user: Claude Code
+    date: '2026-05-24T22:46:24.393Z'
 title: Support a filter for questions
 status: In Progress
 createdBy: Guy
-updatedBy: Guy
+updatedBy: Agent
 tokenMetadata:
   inputTokens: 273918
   outputTokens: 3230
