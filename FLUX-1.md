@@ -754,8 +754,25 @@ history:
     date: '2026-05-24T22:46:24.393Z'
     outcome: Claude Code session ended with code 0.
     endedAt: '2026-05-24T22:47:54.789Z'
+  - type: status_change
+    from: In Progress
+    to: Todo
+    user: Guy
+    date: '2026-05-24T22:51:10.452Z'
+  - type: comment
+    user: Guy
+    date: '2026-05-24T22:51:26.794Z'
+    comment: please move the search icon to the left
+    id: c-2026-05-24t22-51-26-790z
+  - type: agent_session
+    sessionId: c22c9fa0-2c4a-43dd-a031-eb6020497521
+    startedAt: '2026-05-24T22:51:33.920Z'
+    status: active
+    progress: []
+    user: Claude Code
+    date: '2026-05-24T22:51:33.920Z'
 title: Support a filter for questions
-status: In Progress
+status: Todo
 createdBy: Guy
 updatedBy: Agent
 tokenMetadata:
