@@ -420,21 +420,351 @@ history:
   - type: agent_session
     sessionId: a49066cd-05ca-4a91-b465-14dcae4be4de
     startedAt: '2026-05-24T22:46:24.393Z'
-    status: active
-    progress: []
+    status: completed
+    progress:
+      - timestamp: '2026-05-24T22:46:33.203Z'
+        message: Reading FLUX-1.md
+        type: tool
+        data:
+          toolName: Read
+          parameters:
+            file_path: /Users/amittriffon/mazki/dira-li/.flux/FLUX-1.md
+      - timestamp: '2026-05-24T22:46:33.815Z'
+        message: Working
+        type: tool
+        data:
+          toolName: Glob
+          parameters:
+            pattern: client/src/pages/*partment*
+            path: /Users/amittriffon/mazki/dira-li
+      - timestamp: '2026-05-24T22:46:36.945Z'
+        message: Reading ApartmentFormPage.jsx
+        type: tool
+        data:
+          toolName: Read
+          parameters:
+            file_path: >-
+              /Users/amittriffon/mazki/dira-li/client/src/pages/ApartmentFormPage.jsx
+      - timestamp: '2026-05-24T22:46:39.424Z'
+        message: Reading
+        type: info
+      - timestamp: '2026-05-24T22:46:42.090Z'
+        message: Working
+        type: tool
+        data:
+          toolName: Grep
+          parameters:
+            pattern: \.form-content|\.category-section|\.page-actions
+            path: /Users/amittriffon/mazki/dira-li/client/src/index.css
+            output_mode: content
+            '-n': true
+            '-A': 5
+      - timestamp: '2026-05-24T22:46:52.443Z'
+        message: Editing ApartmentFormPage.jsx
+        type: tool
+        data:
+          toolName: Edit
+          parameters:
+            replace_all: false
+            file_path: >-
+              /Users/amittriffon/mazki/dira-li/client/src/pages/ApartmentFormPage.jsx
+            old_string: '  const [loading, setLoading] = useState(true)'
+            new_string: |2-
+                const [loading, setLoading] = useState(true)
+                const [searchQuery, setSearchQuery] = useState('')
+      - timestamp: '2026-05-24T22:46:54.425Z'
+        message: Editing
+        type: info
+      - timestamp: '2026-05-24T22:46:58.065Z'
+        message: Editing ApartmentFormPage.jsx
+        type: tool
+        data:
+          toolName: Edit
+          parameters:
+            replace_all: false
+            file_path: >-
+              /Users/amittriffon/mazki/dira-li/client/src/pages/ApartmentFormPage.jsx
+            old_string: '      <div className="form-content">'
+            new_string: |2-
+                    <div className="search-bar">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                      <input
+                        type="search"
+                        placeholder="חיפוש שאלה..."
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                      />
+                      {searchQuery && (
+                        <button type="button" className="search-clear" onClick={() => setSearchQuery('')}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="form-content">
+      - timestamp: '2026-05-24T22:47:05.059Z'
+        message: Editing ApartmentFormPage.jsx
+        type: tool
+        data:
+          toolName: Edit
+          parameters:
+            replace_all: false
+            file_path: >-
+              /Users/amittriffon/mazki/dira-li/client/src/pages/ApartmentFormPage.jsx
+            old_string: |2-
+                      {questions && questions.categories.map(category => (
+                        <div key={category.id} className="category-section">
+                          <div className="category-header">
+                            <span>{category.icon}</span>
+                            <span>{category.name_he}</span>
+                          </div>
+                          {category.description_he && (
+                            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: 12 }}>
+                              {category.description_he}
+                            </p>
+                          )}
+                          {category.questions.map(q => (
+                            <QuestionField
+                              key={q.id}
+                              question={q}
+                              value={answers[q.id]?.value || ''}
+                              notes={answers[q.id]?.notes || ''}
+                              onChange={handleAnswerChange}
+                            />
+                          ))}
+                        </div>
+                      ))}
+            new_string: |2-
+                      {questions && questions.categories.map(category => {
+                        const filteredQuestions = searchQuery
+                          ? category.questions.filter(q => q.question_he.includes(searchQuery))
+                          : category.questions
+                        if (searchQuery && filteredQuestions.length === 0) return null
+                        return (
+                          <div key={category.id} className="category-section">
+                            <div className="category-header">
+                              <span>{category.icon}</span>
+                              <span>{category.name_he}</span>
+                            </div>
+                            {category.description_he && !searchQuery && (
+                              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: 12 }}>
+                                {category.description_he}
+                              </p>
+                            )}
+                            {filteredQuestions.map(q => (
+                              <QuestionField
+                                key={q.id}
+                                question={q}
+                                value={answers[q.id]?.value || ''}
+                                notes={answers[q.id]?.notes || ''}
+                                onChange={handleAnswerChange}
+                              />
+                            ))}
+                          </div>
+                        )
+                      })}
+      - timestamp: '2026-05-24T22:47:09.352Z'
+        message: Editing ApartmentFormPage.jsx
+        type: tool
+        data:
+          toolName: Edit
+          parameters:
+            replace_all: false
+            file_path: >-
+              /Users/amittriffon/mazki/dira-li/client/src/pages/ApartmentFormPage.jsx
+            old_string: "        <div className=\"category-section\">\n          <div className=\"category-header\">\U0001F4DD פרטים כלליים</div>\n\n          <div className=\"apartment-meta\">"
+            new_string: "        {!searchQuery && <div className=\"category-section\">\n          <div className=\"category-header\">\U0001F4DD פרטים כלליים</div>\n\n          <div className=\"apartment-meta\">"
+      - timestamp: '2026-05-24T22:47:09.426Z'
+        message: Editing
+        type: info
+      - timestamp: '2026-05-24T22:47:12.250Z'
+        message: Reading ApartmentFormPage.jsx
+        type: tool
+        data:
+          toolName: Read
+          parameters:
+            file_path: >-
+              /Users/amittriffon/mazki/dira-li/client/src/pages/ApartmentFormPage.jsx
+            offset: 280
+            limit: 30
+      - timestamp: '2026-05-24T22:47:15.879Z'
+        message: Editing ApartmentFormPage.jsx
+        type: tool
+        data:
+          toolName: Edit
+          parameters:
+            replace_all: false
+            file_path: >-
+              /Users/amittriffon/mazki/dira-li/client/src/pages/ApartmentFormPage.jsx
+            old_string: |2-
+                        </div>
+                      </div>
+
+                      {questions && questions.categories.map(category => {
+                        const filteredQuestions = searchQuery
+            new_string: |2-
+                        </div>
+                      </div>}
+
+                      {questions && questions.categories.map(category => {
+                        const filteredQuestions = searchQuery
+      - timestamp: '2026-05-24T22:47:18.495Z'
+        message: Reading index.css
+        type: tool
+        data:
+          toolName: Read
+          parameters:
+            file_path: /Users/amittriffon/mazki/dira-li/client/src/index.css
+            offset: 190
+            limit: 15
+      - timestamp: '2026-05-24T22:47:24.427Z'
+        message: Thinking
+        type: info
+      - timestamp: '2026-05-24T22:47:24.796Z'
+        message: Editing index.css
+        type: tool
+        data:
+          toolName: Edit
+          parameters:
+            replace_all: false
+            file_path: /Users/amittriffon/mazki/dira-li/client/src/index.css
+            old_string: |-
+              .page-actions-title {
+                font-size: 1rem;
+                font-weight: 700;
+                color: var(--text);
+              }
+
+              .header {
+            new_string: |-
+              .page-actions-title {
+                font-size: 1rem;
+                font-weight: 700;
+                color: var(--text);
+              }
+
+              .search-bar {
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 16px;
+                border-bottom: 1px solid var(--border);
+                background: var(--surface);
+              }
+
+              .search-bar input[type="search"] {
+                flex: 1;
+                border: none;
+                background: var(--bg);
+                border-radius: 8px;
+                padding: 8px 12px;
+                font-size: 14px;
+              }
+
+              .search-bar input[type="search"]:focus {
+                box-shadow: none;
+                border: none;
+                outline: 1px solid var(--primary);
+              }
+
+              .search-clear {
+                background: none;
+                border: none;
+                padding: 4px;
+                cursor: pointer;
+                color: var(--text-secondary);
+                display: flex;
+                align-items: center;
+              }
+
+              .header {
+      - timestamp: '2026-05-24T22:47:27.677Z'
+        message: Reading ApartmentFormPage.jsx
+        type: tool
+        data:
+          toolName: Read
+          parameters:
+            file_path: >-
+              /Users/amittriffon/mazki/dira-li/client/src/pages/ApartmentFormPage.jsx
+            offset: 168
+            limit: 80
+      - timestamp: '2026-05-24T22:47:33.509Z'
+        message: 'Running: cd /Users/amittriffon/mazki/dira-li/client && npx ...'
+        type: tool
+        data:
+          toolName: Bash
+          parameters:
+            command: >-
+              cd /Users/amittriffon/mazki/dira-li/client && npx vite build
+              --mode development 2>&1 | tail -10
+            description: Build client to check for syntax errors
+            timeout: 30000
+      - timestamp: '2026-05-24T22:47:39.428Z'
+        message: Running command
+        type: info
+      - timestamp: '2026-05-24T22:47:41.681Z'
+        message: Editing FLUX-1.md
+        type: tool
+        data:
+          toolName: Edit
+          parameters:
+            replace_all: false
+            file_path: /Users/amittriffon/mazki/dira-li/.flux/FLUX-1.md
+            old_string: 'status: Todo'
+            new_string: 'status: Ready'
+      - timestamp: '2026-05-24T22:47:54.430Z'
+        message: Editing
+        type: info
+      - timestamp: '2026-05-24T22:47:54.789Z'
+        message: >-
+          Implementation complete. Here's what was done:
+
+
+          **Changes made:**
+
+          - `client/src/pages/ApartmentFormPage.jsx` — Added `searchQuery`
+          state, a search bar with magnifying glass icon and clear button
+          rendered between the page-actions-bar and form-content, and filtering
+          logic that hides non-matching questions/categories when searching
+
+          - `client/src/index.css` — Added `.search-bar`, `.search-bar
+          input[type="search"]`, and `.search-clear` styles matching the
+          existing design language
+
+
+          **Behavior:**
+
+          - Search bar is always visible at the top, below the sub-header
+
+          - Typing filters questions by Hebrew substring match on `question_he`
+
+          - Categories with no matching questions are hidden entirely
+
+          - The metadata section (address, price, etc.) hides during search to
+          focus on question results
+
+          - Clear (X) button resets the filter
+
+          - Build verified clean
+
+
+          Ticket FLUX-1 moved to **Ready** status.
     user: Claude Code
     date: '2026-05-24T22:46:24.393Z'
+    outcome: Claude Code session ended with code 0.
+    endedAt: '2026-05-24T22:47:54.789Z'
 title: Support a filter for questions
 status: In Progress
 createdBy: Guy
 updatedBy: Agent
 tokenMetadata:
-  inputTokens: 273918
-  outputTokens: 3230
-  costUSD: 0.615069
+  inputTokens: 887084
+  outputTokens: 7904
+  costUSD: 1.163159
   costIsEstimated: false
-  cacheReadTokens: 225940
-  cacheCreationTokens: 47961
+  cacheReadTokens: 817422
+  cacheCreationTokens: 69624
 order: 0
 ---
 On the apartment form page, we have many possible questions  
