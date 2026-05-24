@@ -228,6 +228,13 @@ history:
     date: '2026-05-24T22:35:38.599Z'
     outcome: Claude Code session ended with code 0.
     endedAt: '2026-05-24T22:36:45.465Z'
+  - type: agent_session
+    sessionId: 1b8eb0c4-88a1-43f3-bcbe-5df70ef4641e
+    startedAt: '2026-05-24T22:40:02.328Z'
+    status: active
+    progress: []
+    user: Claude Code
+    date: '2026-05-24T22:40:02.328Z'
 id: FLUX-1
 title: Support a filter for questions
 status: Grooming
