@@ -771,10 +771,15 @@ history:
     progress: []
     user: Claude Code
     date: '2026-05-24T22:51:33.920Z'
+  - type: status_change
+    from: Todo
+    to: In Progress
+    user: Guy
+    date: '2026-05-24T22:52:29.777Z'
 title: Support a filter for questions
-status: Todo
+status: In Progress
 createdBy: Guy
-updatedBy: Agent
+updatedBy: Guy
 tokenMetadata:
   inputTokens: 887084
   outputTokens: 7904
