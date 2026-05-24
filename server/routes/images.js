@@ -75,6 +75,8 @@ router.get('/images/:id/og.png', async (req, res) => {
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Content-Length', buf.length);
     res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(buf);
   } catch {
     res.status(500).end();
