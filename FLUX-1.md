@@ -407,10 +407,15 @@ history:
     date: '2026-05-24T22:41:42.616Z'
     outcome: Claude Code session ended with code 0.
     endedAt: '2026-05-24T22:42:03.152Z'
+  - type: status_change
+    from: Grooming
+    to: Todo
+    user: Guy
+    date: '2026-05-24T22:43:15.879Z'
 title: Support a filter for questions
-status: Grooming
+status: Todo
 createdBy: Guy
-updatedBy: Agent
+updatedBy: Guy
 tokenMetadata:
   inputTokens: 273918
   outputTokens: 3230
@@ -418,6 +423,7 @@ tokenMetadata:
   costIsEstimated: false
   cacheReadTokens: 225940
   cacheCreationTokens: 47961
+order: 0
 ---
 On the apartment form page, we have many possible questions  
 add a search-bar, always visible on top, but under the sub-header, which filter for the correct questions based on the query
