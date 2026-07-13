@@ -11,6 +11,7 @@ history:
     user: Guy
     date: '2026-05-24T22:35:33.239Z'
     comment: Created ticket.
+    id: a-2026-05-24t22-35-33-239z
   - type: agent_session
     sessionId: a11d77a5-2ded-4d92-9747-528ac7fed481
     startedAt: '2026-05-24T22:35:38.599Z'
@@ -229,6 +230,17 @@ history:
     date: '2026-05-24T22:35:38.599Z'
     outcome: Claude Code session ended with code 0.
     endedAt: '2026-05-24T22:36:45.465Z'
+    originalProgressCount: 17
+    finalMessage: >-
+      Groomed FLUX-1 and moved it to **Todo**. Summary:
+
+
+      - **Priority:** Medium | **Effort:** S | **Tags:** ui, form
+
+      - **Plan:** Add a search input below the metadata section in
+      `ApartmentFormPage.jsx` that filters the question categories by substring
+      match on `question_he`. Small scope — one state variable, one input, one
+      filter over the existing categories loop. No new dependencies.
   - type: agent_session
     sessionId: 1b8eb0c4-88a1-43f3-bcbe-5df70ef4641e
     startedAt: '2026-05-24T22:40:02.328Z'
@@ -367,10 +379,37 @@ history:
     date: '2026-05-24T22:40:02.328Z'
     outcome: Claude Code session ended with code 0.
     endedAt: '2026-05-24T22:40:53.280Z'
+    originalProgressCount: 11
+    finalMessage: >-
+      This ticket has already been groomed. The file at `.flux/FLUX-1.md` shows:
+
+
+      - **Status**: Already moved to `Todo`
+
+      - **Priority**: Medium
+
+      - **Effort**: S
+
+      - **Tags**: `[ui, form]`
+
+      - **Body**: Contains a clear Problem/Motivation section and a 5-step
+      Implementation Plan
+
+      - **History**: Includes a grooming comment and status_change from Grooming
+      → Todo (dated 2026-05-25)
+
+
+      The plan looks solid — add a search input below the metadata section in
+      `ApartmentFormPage.jsx` that filters questions by Hebrew text match across
+      the ~59 questions in 10 categories. No unresolved questions remain.
+
+
+      This ticket is ready for implementation.
   - type: activity
     user: Guy
     date: '2026-05-24T22:41:35.821Z'
     comment: Changed assignee from unassigned to Agent.
+    id: a-2026-05-24t22-41-35-821z
   - type: agent_session
     sessionId: 030998a1-60f7-4229-8456-80c1027512fd
     startedAt: '2026-05-24T22:41:42.616Z'
@@ -408,6 +447,23 @@ history:
     date: '2026-05-24T22:41:42.616Z'
     outcome: Claude Code session ended with code 0.
     endedAt: '2026-05-24T22:42:03.152Z'
+    originalProgressCount: 3
+    finalMessage: >-
+      This ticket has already been groomed. The file `.flux/FLUX-1.md` shows:
+
+
+      - **Status:** `Todo` (already moved from Grooming)
+
+      - **Metadata filled:** priority Medium, effort S, tags [ui, form]
+
+      - **Body:** Has a clear Problem/Motivation section and a 5-step
+      Implementation Plan covering search state, input rendering, filter logic,
+      UX details, and styling
+
+
+      The previous agent session completed grooming on 2026-05-25, including the
+      status_change history entry. The ticket is ready for implementation — no
+      further grooming needed.
   - type: status_change
     from: Grooming
     to: Todo
@@ -755,6 +811,40 @@ history:
     date: '2026-05-24T22:46:24.393Z'
     outcome: Claude Code session ended with code 0.
     endedAt: '2026-05-24T22:47:54.789Z'
+    originalProgressCount: 22
+    finalMessage: >-
+      Implementation complete. Here's what was done:
+
+
+      **Changes made:**
+
+      - `client/src/pages/ApartmentFormPage.jsx` — Added `searchQuery` state, a
+      search bar with magnifying glass icon and clear button rendered between
+      the page-actions-bar and form-content, and filtering logic that hides
+      non-matching questions/categories when searching
+
+      - `client/src/index.css` — Added `.search-bar`, `.search-bar
+      input[type="search"]`, and `.search-clear` styles matching the existing
+      design language
+
+
+      **Behavior:**
+
+      - Search bar is always visible at the top, below the sub-header
+
+      - Typing filters questions by Hebrew substring match on `question_he`
+
+      - Categories with no matching questions are hidden entirely
+
+      - The metadata section (address, price, etc.) hides during search to focus
+      on question results
+
+      - Clear (X) button resets the filter
+
+      - Build verified clean
+
+
+      Ticket FLUX-1 moved to **Ready** status.
   - type: status_change
     from: In Progress
     to: Todo
@@ -1011,6 +1101,12 @@ history:
     date: '2026-05-24T22:51:33.920Z'
     outcome: Claude Code session ended with code 0.
     endedAt: '2026-05-24T22:53:03.388Z'
+    originalProgressCount: 18
+    finalMessage: >-
+      Done. I moved the search icon to the left side of the search bar by
+      placing the SVG element last in the DOM order — in RTL flex layout, this
+      naturally positions it on the left. Build verified successfully. The
+      ticket is now in Ready status for your review.
   - type: status_change
     from: Todo
     to: In Progress
@@ -1025,10 +1121,12 @@ history:
     user: Guy
     date: '2026-05-24T22:54:09.243Z'
     comment: Updated tags to feature.
+    id: a-2026-05-24t22-54-09-243z
   - type: activity
     user: Guy
     date: '2026-05-24T22:54:12.624Z'
     comment: Changed assignee from Agent to Ahmed.
+    id: a-2026-05-24t22-54-12-624z
 title: Support a filter for questions
 status: Done
 createdBy: Guy
