@@ -17,11 +17,22 @@ history:
   - type: agent_session
     sessionId: d36ae7bc-2e53-4f15-ba89-96f963ade0d1
     startedAt: '2026-07-21T10:11:04.289Z'
-    status: active
-    progress: []
+    status: failed
+    progress:
+      - timestamp: '2026-07-21T10:14:10.461Z'
+        message: |-
+          Failed to authenticate. API Error: 401 API key is invalid.
+          ⚠️ Agent error: success
+      - timestamp: '2026-07-21T10:14:10.990Z'
+        message: ⚠️ Claude Code session ended with code 1.
     user: Claude Code
     date: '2026-07-21T10:11:04.289Z'
     enginePid: 86430
+    outcome: Claude Code session ended with code 1.
+    endedAt: '2026-07-21T10:14:10.990Z'
+    originalProgressCount: 2
+    finalMessage: ⚠️ Claude Code session ended with code 1.
 baselineCommit: 94806ac8c9c568007946fb60ea640f7889493f6c
+needsAction: Agent process exited unexpectedly (exit code 1).
 ---
 trying my first
