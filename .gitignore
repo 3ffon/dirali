@@ -6,3 +6,6 @@ open-prompts.json.tmp
 session-binding-secret
 session-binding-secret.tmp
 sessions/
+sync-journal.jsonl
+boot-index.json
+*.body-history.json
